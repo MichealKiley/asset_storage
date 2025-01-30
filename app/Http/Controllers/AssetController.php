@@ -2,34 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\assets;
 use Illuminate\Http\Request;
+
 
 class AssetController extends Controller
 {
-    // view of  all users
+    // view of all users
     public function assetAllView()
     {
-        return view("assetAllView");
-    }
+        $pc = array();
+        $laptop = array();
+        $monitor = array();
 
+        $assets = assets::all();
+        foreach ($assets as $asset) {
+            if ($asset->type == "Laptop") {
+                array_push($laptop, array($asset));
+            }
 
-    // view of single user and assigned assets
-    public function assetSoloView()
-    {
-        return view("assetSoloView");
-    }
+            if ($asset->type == "PC") {
+                array_push($pc, array($asset));
+            }
 
+            if ($asset->type == "Monitor") {
+                array_push($monitor, $asset);
+            }
+        };
 
-    // asset creation page
-    public function assetCreation()
-    {
-        return view("assetCreation");
-    }
-
-
-    // asset modification page
-    public function assetModify()
-    {
-        return view("assetModify");
+        return view("assetAllView", ['all' => $assets, 'laptop' => $laptop, 'pc' => $pc, 'monitor' => $monitor]);
     }
 }

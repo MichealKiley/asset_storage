@@ -8,5 +8,5 @@
 
 <body>
     <h1>Login</h1>
-    <a href="/users">Users</a>
+    <a href="/">Users</a>
 </body>
