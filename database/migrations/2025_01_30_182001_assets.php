@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('make');
             $table->string('model');
+            $table->string('location')->nullable();
             $table->string('user')->nullable();
             // $table->foreignId('user_id');
             $table->timestamps();
