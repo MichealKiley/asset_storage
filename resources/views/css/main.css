@@ -1,0 +1,329 @@
+* {
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.wrapper {
+    margin-top: 20vh;
+    width: 450px;
+    text-align: center;
+}
+
+.table-wrapper {
+    margin-top: 10vh;
+    width: 700px;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    font-size: 45px;
+    color: lightgreen;
+    text-align: center;
+}
+
+h2 {
+    font-size: 35px;
+    color: forestgreen;
+    text-align: center;
+}
+
+h3 {
+    margin: 20px;
+    font-size: 17px;
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+h4 {
+    margin: 20px;
+    font-size: 17px;
+    color: rgb(17, 85, 14);
+    text-align: center;
+}
+
+
+a {
+    color: rgb(49, 189, 49);
+}
+
+.wrapper .text-field {
+    position: relative;
+    width: 80%;
+    height: 40px;
+    margin: 30px 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-field input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid grey;
+    border-radius: 25px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.text-field input::placeholder {
+    color: forestgreen;
+}
+
+#see_pass{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 25px;
+    color: rgb(6, 79, 6);
+}
+
+#confirm_see_pass{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 25px;
+    color: rgb(6, 79, 6);
+}
+
+#see_pass:hover{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 25px;
+    color: forestgreen;
+}
+
+#confirm_see_pass:hover{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 25px;
+    color: forestgreen;
+}
+
+
+#icon-right{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 25px;
+    color: rgb(6, 79, 6);
+}
+
+#icon-left{
+    position: absolute;
+    padding-left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 25px;
+    color: rgb(6, 79, 6);
+}
+
+#icon-money {
+    font-size: 25px;
+    color: rgb(6, 79, 6);
+}
+
+.wrapper .btn {
+    width: 40%;
+    height: 35px;
+    margin: 15px 0;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    background-color: lightgreen;
+    color: white;
+}
+
+.btn:hover {
+    background-color: rgb(122, 216, 122);
+}
+
+.wrapper .errors {
+    margin: 10px;
+    font-size: 15px;
+}
+
+.wrapper .link-to-page {
+    margin: 20px;
+    font-size: 15px;
+}
+
+.wrapper .select-field {
+    margin: 20px;
+    font-size: 17px;
+}
+
+.select-field select{
+    background-color: lightgreen;
+    color: forestgreen;
+    margin: 5px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.wrapper .select-field-lg {
+    margin: 20px;
+    font-size: 17px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.select-field-lg select{
+    height: 30px;
+    width: 150px;
+    background-color: lightgreen;
+    color: forestgreen;
+    margin: 5px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-size: 17px;
+}
+
+.wrapper .number-field {
+    position: relative;
+    width: 50%;
+    height: 40px;
+    margin-bottom: 30px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#amt-to {
+    font-size: 18px;
+    text-align: center;
+}
+
+.number-field input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid grey;
+    border-radius: 25px;
+    font-size: 18px;
+    text-align: left;
+    padding-left: 35px;
+}
+
+.wrapper .list-items {
+    width: 70%;
+    margin: 20px 0;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 25px;
+    padding: 3px;
+    background-color: rgb(242, 239, 239);
+}
+
+.list-items label {
+    color: forestgreen;
+    font-size: 20px;
+}
+
+.list-items p {
+    font-size: 17px;
+    margin: 10px;
+}
+
+.wrapper .conversion-sum {
+    position: relative;
+    width: 100%;
+    margin: 25px 0;
+    border-radius: 25px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar{
+    width: 100%;
+    height: 30px;
+}
+
+
+.navbar ul{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+    align-items: center;
+}
+
+.navbar a{
+    color: forestgreen;
+    text-decoration: none;
+    padding: 15px;
+    display: block;
+    text-align: center;
+    font-size: 17px;
+}
+
+.navbar a:hover{
+    background-color: rgb(239, 238, 238);
+}
+
+.navbar li{
+    float: left;
+}
+
+.table-wrapper .history-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 17px;
+    min-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.history-table thead tr {
+    color: forestgreen;
+    background-color: lightgreen;
+    text-align: left;
+    font-weight: bold;
+}
+
+.history-table tbody tr:nth-of-type(even) {
+    background-color: rgb(240, 240, 240);
+}
+
+.history-table tbody tr:last-of-type {
+    border-bottom: 5px solid lightgreen;
+}
+
+.history-table td {
+    padding: 9px;
+}
+
+.history-table th {
+    padding: 7px;
+}
+
+
+
