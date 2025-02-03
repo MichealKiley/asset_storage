@@ -108,8 +108,8 @@
         }
 
         input[type="search"]::-webkit-search-cancel-button {
-        filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
-        margin-right: 10px;
+            filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+            margin-right: 10px;
         }
 
 
@@ -128,7 +128,7 @@
             font-size: 17px;
             margin-left: 0px;
             margin-right: 0px;
-            padding-top: 25px;
+            margin-top: 25px;
         }
 
         .assets-table td {
@@ -164,6 +164,9 @@
 
 
     </style>
+
+    <?php $all = $all ?>
+
 </head>
 
 
@@ -187,8 +190,7 @@
 
     <div class="table-wrapper">
 
-        {{-- all assets --}}
-        <table id='all' class="assets-table">
+        <table class="assets-table">
             <thead>
                 <tr>
                     <th scope="col">Type</th>
@@ -198,84 +200,9 @@
                     <th scope="col">User</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($all as $all)
+            <tbody id="asset-tbody">
 
-                    <tr>
-                        <td>{{$all["type"]}}</td>
-                        <td>{{$all["make"]}}</td>
-                        <td>{{$all["model"]}}</td>
-                        <td>{{$all["location"]}}</td>
-                        <td>{{$all["user"]}}</td>
-                    </tr>
-                @endforeach
             </tbody>
-        </table>
-
-        {{-- Laptops --}}
-        <table id='laptop' class="assets-table">
-            <thead>
-                <tr>
-                    <th scope="col">Type</th>
-                    <th scope="col">Make</th>
-                    <th scope="col">Model</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">User</th>
-                </tr>
-            </thead>
-            @foreach ($laptop as $laptop)
-                <tr>
-                    <td>{{$laptop["type"]}}</td>
-                    <td>{{$laptop["make"]}}</td>
-                    <td>{{$laptop["model"]}}</td>
-                    <td>{{$laptop["location"]}}</td>
-                    <td>{{$laptop["user"]}}</td>
-                </tr>
-            @endforeach
-        </table>
-
-        {{-- Pc's --}}
-        <table id='pc' class="assets-table">
-            <thead>
-                <tr>
-                    <th scope="col">Type</th>
-                    <th scope="col">Make</th>
-                    <th scope="col">Model</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">User</th>
-                </tr>
-            </thead>
-            @foreach ($pc as $pc)
-                <tr>
-                    <td>{{$pc["type"]}}</td>
-                    <td>{{$pc["make"]}}</td>
-                    <td>{{$pc["model"]}}</td>
-                    <td>{{$pc["location"]}}</td>
-                    <td>{{$pc["user"]}}</td>
-                </tr>
-            @endforeach
-        </table>
-
-        {{-- Monitors --}}
-        <table id='monitor' class="assets-table">
-            <thead>
-                <tr>
-                    <th scope="col">Type</th>
-                    <th scope="col">Make</th>
-                    <th scope="col">Model</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">User</th>
-                </tr>
-            </thead>
-            @foreach ($monitor as $monitor)
-                <tr>
-                    <td>{{$monitor["type"]}}</td>
-                    <td>{{$monitor["make"]}}</td>
-                    <td>{{$monitor["model"]}}</td>
-                    <td>{{$monitor["location"]}}</td>
-                    <td>{{$monitor["user"]}}</td>
-                </tr>
-            @endforeach
         </table>
 
     </div>
@@ -283,57 +210,99 @@
 
     <script>
 
-        var allAssetsArray = <?php echo json_encode($all); ?>;
-
-        Object.keys(allAssetsArray).forEach(function(key) {
-            console.log('Key : ' + key + ', Value : ' + allAssetsArray[key])
-        })
-        
-
         // Btn
         const allBtn = document.getElementById('allToggle');
         const laptopBtn = document.getElementById('laptopToggle');
         const pcBtn = document.getElementById('pcToggle');
         const monitorBtn = document.getElementById('monitorToggle');
+        
+        var sortBtn = null;
+        var tbody = document.getElementById("asset-tbody");
+        var allAssetsArray = <?php echo json_encode($all); ?>;
 
-        // Hiding text
-        document.getElementById('all').style.display = "block";
-        document.getElementById('laptop').style.display = "none";
-        document.getElementById('pc').style.display = "none";
-        document.getElementById('monitor').style.display = "none";
+        if (sortBtn == null) {
+            sortBtn = "all";
+            displayAssetsSort(sortBtn);
+        }
 
-
-        // all btn
         allBtn.addEventListener("click", e => {
-            document.getElementById('all').style.display = "block";
-            document.getElementById('laptop').style.display = "none";
-            document.getElementById('pc').style.display = "none";
-            document.getElementById('monitor').style.display = "none";
+            if (sortBtn != "all") {
+                document.getElementById("asset-tbody").innerHTML = "";          
+                sortBtn = "all";
+                displayAssetsSort(sortBtn);
+            }
         })
 
-        // laptop btn
         laptopBtn.addEventListener("click", e => {
-            document.getElementById('all').style.display = "none";
-            document.getElementById('laptop').style.display = "block";
-            document.getElementById('pc').style.display = "none";
-            document.getElementById('monitor').style.display = "none";
+            if (sortBtn != "laptop") {
+                document.getElementById("asset-tbody").innerHTML = "";          
+                sortBtn = "laptop";
+                displayAssetsSort(sortBtn);
+            }
         })
 
-        // pc btn
         pcBtn.addEventListener("click", e => {
-            document.getElementById('all').style.display = "none";
-            document.getElementById('laptop').style.display = "none";
-            document.getElementById('pc').style.display = "block";
-            document.getElementById('monitor').style.display = "none";
+            if (sortBtn != "pc") {
+                document.getElementById("asset-tbody").innerHTML = "";          
+                sortBtn = "pc";
+                displayAssetsSort(sortBtn);
+            }
         })
 
-        // monitor btn
         monitorBtn.addEventListener("click", e => {
-            document.getElementById('all').style.display = "none";
-            document.getElementById('laptop').style.display = "none";
-            document.getElementById('pc').style.display = "none";
-            document.getElementById('monitor').style.display = "block";
+            if (sortBtn != "monitor") {
+                document.getElementById("asset-tbody").innerHTML = "";          
+                sortBtn = "monitor";
+                displayAssetsSort(sortBtn);
+            }
         })
+
+
+        function searchBar() {          
+            displayAssetsSort(undefined, document.getElementById("search-bar").value);
+        }
+
+        function displayAssetsSort(sortBtn,searchQuery) {
+            var counter = 0;
+
+        
+            if (searchQuery != undefined) {
+                Object.keys(allAssetsArray).forEach(function(key) {
+                
+                    console.log(searchQuery);
+                    console.log(getNestedKeys(allAssetsArray, "type"));
+
+                    // if (allAssetsArray[key]["type"] == sortBtn || sortBtn == "all"){
+
+                    //     var row = tbody.insertRow(counter);
+
+                    //     row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
+                    //     row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
+                    //     row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
+                    //     row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
+                    //     row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
+
+                    //     counter += 1;
+                    // }
+                })
+            } else {
+                Object.keys(allAssetsArray).forEach(function(key) {
+
+                    if (allAssetsArray[key]["type"] == sortBtn || sortBtn == "all"){
+
+                        var row = tbody.insertRow(counter);
+                
+                        row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
+                        row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
+                        row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
+                        row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
+                        row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
+
+                        counter += 1;
+                    }
+                })
+            }
+        }
     </script>
 </body>
 </html>
