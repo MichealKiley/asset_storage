@@ -200,6 +200,13 @@
             padding-bottom: 15px;
         }
 
+        .edit-form #select-field {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
 
     </style>
 
@@ -215,7 +222,7 @@
     </div> --}}
 
     {{-- Sorting tools --}}
-    {{-- <div class="toggleBtn">
+    <div class="toggleBtn">
         <button id="allToggle">All</button>
         <button id="laptopToggle">Laptop</button>
         <button id="pcToggle">PC</button>
@@ -226,9 +233,9 @@
         <input type="search" id="search-bar" placeholder="Search for Asset" value=""></input>
     </div>
 
-    <div class="table-wrapper"> --}}
+    <div class="table-wrapper">
 
-        {{-- <table class="assets-table">
+        <table class="assets-table">
             <thead>
                 <tr>
                     <th>Type</th>
@@ -244,15 +251,21 @@
             <tbody id="asset-tbody">
 
             </tbody>
-        </table> --}}
+        </table>
 
     </div>
 
-    <div class="edit-popup">
+    {{-- edit popup --}}
+    
+    {{-- <div class="edit-popup">
         <form action="" class="edit-form">
-            <div id="text-field">
+            <div id="select-field">
                 <label for="edit-type">Type</label>
-                <input type="text" name="type" id="edit-type" placeholder="Type">
+                <select name="type" id="edit-type" >
+                    <option value="laptop">Laptop</option>
+                    <option value="pc">PC</option>
+                    <option value="monitor">Monitor</option>
+                </select>
             </div>
             <div id="text-field">
                 <label for="edit-type">Make</label>
@@ -270,12 +283,16 @@
                 <label for="edit-type">User</label>
                 <input type="text" name="user" id="edit-user" placeholder="User">
             </div>
-            <div id="text-field">
+            <div id="select-field">
                 <label for="edit-type">Status</label>
-                <input type="text" name="status" id="edit-status" placeholder="Status">
+                <select name="status" id="edit-status" >
+                    <option value="active">Active</option>
+                    <option value="not-in-use">Not in use</option>
+                    <option value="inactive">Inactive</option>
+                </select>
             </div>
         </form>
-    </div>
+    </div> --}}
 
 
     <script>
@@ -287,9 +304,12 @@
         const monitorBtn = document.getElementById('monitorToggle');
         const search = document.getElementById("search-bar");
         
+        // document.getElementByClass("edit-popup").style.display = "none";
+        
         var sortBtn = null;
         var tbody = document.getElementById("asset-tbody");
         var allAssetsArray = <?php echo json_encode($all); ?>;
+
 
         if (sortBtn == null) {
             sortBtn = "all";
@@ -371,7 +391,7 @@
                     row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
                     row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
                     row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-box' style='color:" + color + "'></i>";
-                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box' ></i>";
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box' onclick='editAsset(" + counter + ")'></i>";
 
                     counter += 1;
                 }
@@ -413,12 +433,18 @@
                     row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
                     row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
                     row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-box' style='color:" + color + "'></i>";
-                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box ></i>";
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box' onclick='editAsset(" + counter + ")'></i>";
 
                     counter += 1;
                 }
             })
         }
+
+        function editAsset(tr) {
+            const table = document.getElementsByClass("assets-table");
+            console.log("test");
+        }
+
     </script>
 </body>
 </html>
