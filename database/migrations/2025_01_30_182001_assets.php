@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('user')->nullable();
             // $table->foreignId('user_id');
             $table->timestamps();
+            $table->string('status');
         });
     }
 

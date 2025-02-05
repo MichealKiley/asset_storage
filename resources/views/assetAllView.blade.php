@@ -39,14 +39,12 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            /* background-color: rgb(234, 234, 234) */
         }
 
         .header {
             width: 100%;
             height: 15%;
             color: rgb(29, 30, 99);
-            /* background-color: rgb(29, 30, 99); */
             text-align: center;
             font-weight: bold;
             align-content: center
@@ -62,6 +60,7 @@
         .toggleBtn{
             display: flex;
             flex-direction: row;
+            margin-top: 25px;
         }
 
         .toggleBtn button {
@@ -162,6 +161,45 @@
             padding: 7px;
         }
 
+        #status-box {
+            display: flex;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        #edit-box {
+            display: flex;
+            justify-content: center;
+            font-size: 20px;
+            color: grey
+        }
+
+        .edit-popup {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-popup .edit-form {
+            height: 500px;
+            width: 500px;
+            flex-direction: column;
+            background-color: aqua;
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-form #text-field {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+
 
     </style>
 
@@ -172,12 +210,12 @@
 
 <body>
 
-    <div class="header">
+    {{-- <div class="header">
         <h1>Assets</h1>
-    </div>
+    </div> --}}
 
     {{-- Sorting tools --}}
-    <div class="toggleBtn">
+    {{-- <div class="toggleBtn">
         <button id="allToggle">All</button>
         <button id="laptopToggle">Laptop</button>
         <button id="pcToggle">PC</button>
@@ -185,26 +223,58 @@
     </div>
 
     <div class="search-bar">
-        <input type="search" id="search-bar" placeholder="Search for Asset" value="" onchange="searchBar()"></input>
+        <input type="search" id="search-bar" placeholder="Search for Asset" value=""></input>
     </div>
 
-    <div class="table-wrapper">
+    <div class="table-wrapper"> --}}
 
-        <table class="assets-table">
+        {{-- <table class="assets-table">
             <thead>
                 <tr>
-                    <th scope="col">Type</th>
-                    <th scope="col">Make</th>
-                    <th scope="col">Model</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">User</th>
+                    <th>Type</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Location</th>
+                    <th>User</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="asset-tbody">
 
             </tbody>
-        </table>
+        </table> --}}
 
+    </div>
+
+    <div class="edit-popup">
+        <form action="" class="edit-form">
+            <div id="text-field">
+                <label for="edit-type">Type</label>
+                <input type="text" name="type" id="edit-type" placeholder="Type">
+            </div>
+            <div id="text-field">
+                <label for="edit-type">Make</label>
+                <input type="text" name="make" id="edit-make" placeholder="Make">
+            </div>
+            <div id="text-field">
+                <label for="edit-type">Model</label>
+                <input type="text" name="model" id="edit-model" placeholder="Model">
+            </div>
+            <div id="text-field">
+                <label for="edit-type">Location</label>
+                <input type="text" name="location" id="edit-location" placeholder="Location">
+            </div>
+            <div id="text-field">
+                <label for="edit-type">User</label>
+                <input type="text" name="user" id="edit-user" placeholder="User">
+            </div>
+            <div id="text-field">
+                <label for="edit-type">Status</label>
+                <input type="text" name="status" id="edit-status" placeholder="Status">
+            </div>
+        </form>
     </div>
 
 
@@ -215,6 +285,7 @@
         const laptopBtn = document.getElementById('laptopToggle');
         const pcBtn = document.getElementById('pcToggle');
         const monitorBtn = document.getElementById('monitorToggle');
+        const search = document.getElementById("search-bar");
         
         var sortBtn = null;
         var tbody = document.getElementById("asset-tbody");
@@ -258,50 +329,95 @@
         })
 
 
-        function searchBar() {          
-            displayAssetsSort(undefined, document.getElementById("search-bar").value);
+        search.addEventListener("input", e=> {
+
+            if (search.value == '') {
+                sortBtn = "all";
+                displayAssetsSort(sortBtn);
+            } else {
+                document.getElementById("asset-tbody").innerHTML = "";          
+                sortBtn = "search";
+                displayAssetsSearch(search.value.toLowerCase());
+            }
+        })
+
+
+        function displayAssetsSort(sortBtn) {
+            var counter = 0;
+        
+            Object.keys(allAssetsArray).forEach(function(key) {
+
+                if (allAssetsArray[key]["type"].toLowerCase() == sortBtn || sortBtn == "all"){
+
+                    if (allAssetsArray[key]["status"] == "active") {
+                        var color = "green";
+                    }
+
+                    if (allAssetsArray[key]["status"] == "inactive") {
+                        var color = "firebrick";
+                    }
+
+                    if (allAssetsArray[key]["status"] == "not in use") {
+                        var color = "gray";
+                    }
+
+                    var created = new Date(allAssetsArray[key]["created_at"]);
+                    var row = tbody.insertRow(counter);
+            
+                    row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
+                    row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
+                    row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
+                    row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
+                    row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
+                    row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
+                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-box' style='color:" + color + "'></i>";
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box' ></i>";
+
+                    counter += 1;
+                }
+            })
         }
 
-        function displayAssetsSort(sortBtn,searchQuery) {
+        function displayAssetsSearch(searchQuery) {
             var counter = 0;
-
         
-            if (searchQuery != undefined) {
-                Object.keys(allAssetsArray).forEach(function(key) {
-                
-                    console.log(searchQuery);
-                    console.log(getNestedKeys(allAssetsArray, "type"));
+            Object.keys(allAssetsArray).forEach(function(key) {
 
-                    // if (allAssetsArray[key]["type"] == sortBtn || sortBtn == "all"){
+                if (allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
+                    allAssetsArray[key]["make"].toLowerCase().includes(searchQuery) ||
+                    allAssetsArray[key]["model"].toLowerCase().includes(searchQuery) ||
+                    allAssetsArray[key]["location"].toLowerCase().includes(searchQuery) ||
+                    allAssetsArray[key]["user"].toLowerCase().includes(searchQuery) ||
+                    allAssetsArray[key]["created_at"].toLowerCase().includes(searchQuery)
+                ){
 
-                    //     var row = tbody.insertRow(counter);
-
-                    //     row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
-                    //     row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
-                    //     row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
-                    //     row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
-                    //     row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
-
-                    //     counter += 1;
-                    // }
-                })
-            } else {
-                Object.keys(allAssetsArray).forEach(function(key) {
-
-                    if (allAssetsArray[key]["type"] == sortBtn || sortBtn == "all"){
-
-                        var row = tbody.insertRow(counter);
-                
-                        row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
-                        row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
-                        row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
-                        row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
-                        row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
-
-                        counter += 1;
+                    if (allAssetsArray[key]["status"] == "active") {
+                        var color = "green";
                     }
-                })
-            }
+
+                    if (allAssetsArray[key]["status"] == "inactive") {
+                        var color = "firebrick";
+                    }
+
+                    if (allAssetsArray[key]["status"] == "not in use") {
+                        var color = "gray";
+                    }
+
+                    var created = new Date(allAssetsArray[key]["created_at"]);
+                    var row = tbody.insertRow(counter);
+            
+                    row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
+                    row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
+                    row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
+                    row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
+                    row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
+                    row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
+                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-box' style='color:" + color + "'></i>";
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box ></i>";
+
+                    counter += 1;
+                }
+            })
         }
     </script>
 </body>
