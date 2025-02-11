@@ -174,24 +174,12 @@
             color: grey
         }
 
-        /* #edit-overlay {
-            position: fixed;
-            display: block;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 2;
-            cursor: pointer;
-        } */
 
         .overlay-container {
             position: fixed;
             display: flex;
             justify-content: center;
+            flex-direction: column;
             align-items:center;
             width: 100%;
             height: 100%;
@@ -199,23 +187,146 @@
             z-index: 2;
         }
 
-        #edit-form {
+        #edit-form  {
+            position: relative;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            width: 50%;
-            height: 50%;
+            width: 45%;
+            height: 65%;
             background-color: white;
             border-radius: 25px;
+            padding: 10px;
         }
 
-        #edit-text-field {
 
+        #edit-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin: 5px;
+        }
+
+        #edit-select-wrapper {
+            display: flex;
+            flex-direction: row;
+            text-align: center;
+            margin: 5px;
+        }
+
+        #edit-btn-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+        }
+
+
+        #edit-text-field {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin: 5px;
         }
 
         #edit-select-field {
-
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin: 5px;
         }
+
+        #edit-btn-field {
+            display: flex;
+            flex-direction: row;
+            text-align: center;
+            margin: 5px;
+        }
+
+
+        #edit-text-field input {
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            background-color: rgb(29, 30, 99);
+            color: white;
+            text-align: left;
+            padding: 15px;
+            width: 350px;
+            height: 35px;
+        }
+
+        #edit-text-field input::placeholder {
+            color: rgb(206, 206, 206);
+        }
+
+        #edit-select-field select {
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            background-color: rgb(29, 30, 99);
+            color: white;
+            text-align: center;   
+            width: 100px;
+            height: 30px;
+            font-size: 15px;
+        }
+
+        #save-asset-btn {
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            background-color: rgb(29, 30, 99);
+            color: white;
+            text-align: center;   
+            width: 125px;
+            height: 35px;
+            margin: 5px;
+            font-size: 15px;
+        }
+
+        #cancel-btn {
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            color: rgb(29, 30, 99);
+            text-align: center;   
+            width: 125px;
+            height: 35px;
+            margin: 5px;
+            font-size: 15px;
+        }
+
+        #delete-asset-btn button{
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            color: rgb(255, 0, 0);
+            text-align: center;   
+            background-color: white;
+            width: 50px;
+            height: 40px;
+            margin: 10px;
+            font-size: 25px;
+        }
+
+
+
+        #close-overlay button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border: none;
+            outline: none;
+            background-color: rgb(255, 255, 255);
+            color: rgb(29, 30, 99);
+            margin: 10px;
+            font-size: 45px;
+        }
+
+
+        
 
 
     </style>
@@ -231,38 +342,62 @@
     
     <div class="overlay-container">
         <form action="" id="edit-form">
-            <div id="edit-select-field">
-                <label for="edit-type">Type</label>
-                <select name="type" id="edit-type" >
-                    <option value="laptop">Laptop</option>
-                    <option value="pc">PC</option>
-                    <option value="monitor">Monitor</option>
-                </select>
+
+            <h3>Asset Id </h3>
+
+            <div id="close-overlay">
+                <button type="button" onclick="editAsset(undefined,'close')"><i class='bx bx-x'></i></button>
             </div>
-            <div id="edit-text-field">
-                <label for="edit-type">Make</label>
-                <input type="text" name="make" id="edit-make" placeholder="Make">
+
+            <div id="edit-select-wrapper">
+                <div id="edit-select-field">
+                    <label>Type</label>
+                    <select name="type">
+                        <option value="laptop">Laptop</option>
+                        <option value="pc">PC</option>
+                        <option value="monitor">Monitor</option>
+                    </select>
+                </div>
+                <div id="edit-select-field">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="active">Active</option>
+                        <option value="not-in-use">Not in use</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
             </div>
-            <div id="edit-text-field">
-                <label for="edit-type">Model</label>
-                <input type="text" name="model" id="edit-model" placeholder="Model">
+
+            <div id="edit-text-wrapper">
+                <div id="edit-text-field">
+                    <label>Make</label>
+                    <input type="text" name="make" placeholder="Make">
+                </div>
+                <div id="edit-text-field">
+                    <label>Model</label>
+                    <input type="text" name="model" placeholder="Model">
+                </div>
+                <div id="edit-text-field">
+                    <label>Location</label>
+                    <input type="text" name="location" placeholder="Location">
+                </div>
+                <div id="edit-text-field">
+                    <label>User</label>
+                    <input type="text" name="user" placeholder="User">
+                </div>
             </div>
-            <div id="edit-text-field">
-                <label for="edit-type">Location</label>
-                <input type="text" name="location" id="edit-location" placeholder="Location">
+
+            <div id="edit-btn-wrapper">
+                <div id="edit-btn-field">
+                    <button type="submit" name="save-changes" id="save-asset-btn">Save</button>
+                    <button type="submit" name="cancel-changes" id="cancel-btn" onclick="editAsset(undefined,'close')">Cancel</button>
+                </div>
             </div>
-            <div id="edit-text-field">
-                <label for="edit-type">User</label>
-                <input type="text" name="user" id="edit-user" placeholder="User">
+
+            <div id="delete-asset-btn">
+                <button type="button" name="delete-asset"><i class='bx bx-trash'></i></button>
             </div>
-            <div id="edit-select-field">
-                <label for="edit-type">Status</label>
-                <select name="status" id="edit-status" >
-                    <option value="active">Active</option>
-                    <option value="not-in-use">Not in use</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
+            
         </form>
     </div>
 
@@ -289,6 +424,7 @@
             <table class="assets-table">
                 <thead>
                     <tr>
+                        <th>Key</th>
                         <th>Type</th>
                         <th>Make</th>
                         <th>Model</th>
@@ -296,6 +432,7 @@
                         <th>User</th>
                         <th>Created</th>
                         <th>Status</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -309,7 +446,7 @@
 
     
     <script>
-        // Btn
+        // Declaring Variables
         const allBtn = document.getElementById('allToggle');
         const laptopBtn = document.getElementById('laptopToggle');
         const pcBtn = document.getElementById('pcToggle');
@@ -321,11 +458,13 @@
         var allAssetsArray = <?php echo json_encode($all); ?>;
     
     
+        // view all assets on page opening
         if (sortBtn == null) {
             sortBtn = "all";
             displayAssetsSort(sortBtn);
         }
     
+        // all button view
         allBtn.addEventListener("click", e => {
             if (sortBtn != "all") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -334,6 +473,7 @@
             }
         })
     
+        // laptop button view
         laptopBtn.addEventListener("click", e => {
             if (sortBtn != "laptop") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -342,6 +482,7 @@
             }
         })
     
+        // pc button view
         pcBtn.addEventListener("click", e => {
             if (sortBtn != "pc") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -350,6 +491,7 @@
             }
         })
     
+        // monitor button view
         monitorBtn.addEventListener("click", e => {
             if (sortBtn != "monitor") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -359,6 +501,7 @@
         })
     
     
+        // search asset view
         search.addEventListener("input", e=> {
     
             if (search.value == '') {
@@ -372,6 +515,7 @@
         })
     
     
+        // button sort asset view function
         function displayAssetsSort(sortBtn) {
             var counter = 0;
     
@@ -393,21 +537,30 @@
     
                     var created = new Date(allAssetsArray[key]["created_at"]);
                     var row = tbody.insertRow();
-            
-                    row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
-                    row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
-                    row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
-                    row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
-                    row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
-                    row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
-                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
-                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick='editAsset(" + counter + ")'></i>";
+
+                    row.insertCell(0).innerHTML = "TN-" + allAssetsArray[key]["id"];
+                    row.insertCell(1).innerHTML = allAssetsArray[key]["type"];
+                    row.insertCell(2).innerHTML = allAssetsArray[key]["make"];
+                    row.insertCell(3).innerHTML = allAssetsArray[key]["model"];
+                    row.insertCell(4).innerHTML = allAssetsArray[key]["location"];
+                    row.insertCell(5).innerHTML = allAssetsArray[key]["user"];
+                    row.insertCell(6).innerHTML = created.toLocaleDateString('en-US');
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
+                    row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open')\"></i>";
+
+                    if (allAssetsArray[key]["type"].toLowerCase() != "monitor") {
+                        row.insertCell(9).innerHTML = "<i class='bx bx-desktop' id='edit-btn' onclick=\"remoteLink(" + 
+                        counter + ",'" + allAssetsArray[key]["user"] + "','" + allAssetsArray[key]["model"] + "'" + ")\"></i>";
+                    } else {
+                        row.insertCell(9).innerHTML = ""
+                    }
     
                     counter += 1;
                 }
             })
         }
     
+        // search sort asset view function
         function displayAssetsSearch(searchQuery) {
             var counter = 0;
     
@@ -436,32 +589,60 @@
                     var created = new Date(allAssetsArray[key]["created_at"]);
                     var row = tbody.insertRow();
             
-                    row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
-                    row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
-                    row.insertCell(2).innerHTML = allAssetsArray[key]["model"];
-                    row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
-                    row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
-                    row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
-                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
-                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick='editAsset(" + counter + ")'></i>";
+                    row.insertCell(0).innerHTML = "TN-" + allAssetsArray[key]["id"];
+                    row.insertCell(1).innerHTML = allAssetsArray[key]["type"];
+                    row.insertCell(2).innerHTML = allAssetsArray[key]["make"];
+                    row.insertCell(3).innerHTML = allAssetsArray[key]["model"];
+                    row.insertCell(4).innerHTML = allAssetsArray[key]["location"];
+                    row.insertCell(5).innerHTML = allAssetsArray[key]["user"];
+                    row.insertCell(6).innerHTML = created.toLocaleDateString('en-US');
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
+                    row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open')\"></i>";
+
+                    if (allAssetsArray[key]["type"].toLowerCase() != "monitor") {
+                        row.insertCell(9).innerHTML = "<i class='bx bx-desktop' id='edit-btn' onclick=\"remoteLink(" + 
+                        counter + ",'" + allAssetsArray[key]["user"] + "','" + allAssetsArray[key]["model"] + "'" + ")\"></i>";
+                    } else {
+                        row.insertCell(9).innerHTML = ""
+                    }
     
                     counter += 1;
                 }
             })
         }
         
-        function editAsset(tr) {
-            var counter = 0;
+        // edit asset function
+        function editAsset(tr,action) {
 
-            Object.keys(allAssetsArray).forEach(function(key) {
-                if (counter == tr) {
-                    console.log(allAssetsArray[key]);
-                } 
+            // open overlay
+            if (tr != undefined && action == "open") { 
 
-                counter += 1;
-            })
+                document.getElementsByClassName("overlay-container")[0].style.display = "flex";
+
+                var counter = 0;
+
+                Object.keys(allAssetsArray).forEach(function(key) {
+                    if (counter == tr) {
+                        console.log(allAssetsArray[key]);
+                    } 
+
+                    counter += 1;
+                })
+            }
+
+            // close overlay
+            if (tr == undefined && action == "close") {
+                document.getElementsByClassName("overlay-container")[0].style.display = "none";
+            }
+
+
+        }
+
+        function remoteLink(tr,username, model) {
+            window.open("https://neuco.screenconnect.com/Host#Access/All%20Machines%20by%20Company/" + username + " " + model + "", '_blank');
         }
     
+
     </script>
 
 </body>
