@@ -34,7 +34,7 @@
             box-sizing: border-box;
         }
 
-        body {
+        .container {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -161,50 +161,60 @@
             padding: 7px;
         }
 
-        #status-box {
+        #status-btn {
             display: flex;
             justify-content: center;
             font-size: 20px;
         }
 
-        #edit-box {
+        #edit-btn {
             display: flex;
             justify-content: center;
             font-size: 20px;
             color: grey
         }
 
-        .edit-popup {
+        /* #edit-overlay {
+            position: fixed;
+            display: block;
             width: 100%;
             height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2;
+            cursor: pointer;
+        } */
+
+        .overlay-container {
+            position: fixed;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items:center;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2;
         }
 
-        .edit-popup .edit-form {
-            height: 500px;
-            width: 500px;
+        #edit-form {
+            display: flex;
             flex-direction: column;
-            background-color: aqua;
+            align-items: center;
+            width: 50%;
+            height: 50%;
+            background-color: white;
             border-radius: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        .edit-form #text-field {
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            padding-bottom: 15px;
+        #edit-text-field {
+
         }
 
-        .edit-form #select-field {
-            display: flex;
-            flex-direction: column;
-            text-align: center;
-            padding-bottom: 15px;
+        #edit-select-field {
+
         }
 
 
@@ -217,49 +227,11 @@
 
 <body>
 
-    {{-- <div class="header">
-        <h1>Assets</h1>
-    </div> --}}
-
-    {{-- Sorting tools --}}
-    <div class="toggleBtn">
-        <button id="allToggle">All</button>
-        <button id="laptopToggle">Laptop</button>
-        <button id="pcToggle">PC</button>
-        <button id="monitorToggle">Monitor</button>
-    </div>
-
-    <div class="search-bar">
-        <input type="search" id="search-bar" placeholder="Search for Asset" value=""></input>
-    </div>
-
-    <div class="table-wrapper">
-
-        <table class="assets-table">
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Location</th>
-                    <th>User</th>
-                    <th>Created</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="asset-tbody">
-
-            </tbody>
-        </table>
-
-    </div>
-
     {{-- edit popup --}}
     
-    {{-- <div class="edit-popup">
-        <form action="" class="edit-form">
-            <div id="select-field">
+    <div class="overlay-container">
+        <form action="" id="edit-form">
+            <div id="edit-select-field">
                 <label for="edit-type">Type</label>
                 <select name="type" id="edit-type" >
                     <option value="laptop">Laptop</option>
@@ -267,23 +239,23 @@
                     <option value="monitor">Monitor</option>
                 </select>
             </div>
-            <div id="text-field">
+            <div id="edit-text-field">
                 <label for="edit-type">Make</label>
                 <input type="text" name="make" id="edit-make" placeholder="Make">
             </div>
-            <div id="text-field">
+            <div id="edit-text-field">
                 <label for="edit-type">Model</label>
                 <input type="text" name="model" id="edit-model" placeholder="Model">
             </div>
-            <div id="text-field">
+            <div id="edit-text-field">
                 <label for="edit-type">Location</label>
                 <input type="text" name="location" id="edit-location" placeholder="Location">
             </div>
-            <div id="text-field">
+            <div id="edit-text-field">
                 <label for="edit-type">User</label>
                 <input type="text" name="user" id="edit-user" placeholder="User">
             </div>
-            <div id="select-field">
+            <div id="edit-select-field">
                 <label for="edit-type">Status</label>
                 <select name="status" id="edit-status" >
                     <option value="active">Active</option>
@@ -292,30 +264,68 @@
                 </select>
             </div>
         </form>
-    </div> --}}
+    </div>
 
+    <div class="container">
 
+        {{-- <div class="header">
+            <h1>Assets</h1>
+        </div> --}}
+
+        {{-- Sorting tools --}}
+        <div class="toggleBtn">
+            <button id="allToggle">All</button>
+            <button id="laptopToggle">Laptop</button>
+            <button id="pcToggle">PC</button>
+            <button id="monitorToggle">Monitor</button>
+        </div>
+
+        <div class="search-bar">
+            <input type="search" id="search-bar" placeholder="Search for Asset" value=""></input>
+        </div>
+
+        <div class="table-wrapper">
+
+            <table class="assets-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Location</th>
+                        <th>User</th>
+                        <th>Created</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="asset-tbody">
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    
     <script>
-
         // Btn
         const allBtn = document.getElementById('allToggle');
         const laptopBtn = document.getElementById('laptopToggle');
         const pcBtn = document.getElementById('pcToggle');
         const monitorBtn = document.getElementById('monitorToggle');
         const search = document.getElementById("search-bar");
-        
-        // document.getElementByClass("edit-popup").style.display = "none";
-        
+    
         var sortBtn = null;
         var tbody = document.getElementById("asset-tbody");
         var allAssetsArray = <?php echo json_encode($all); ?>;
-
-
+    
+    
         if (sortBtn == null) {
             sortBtn = "all";
             displayAssetsSort(sortBtn);
         }
-
+    
         allBtn.addEventListener("click", e => {
             if (sortBtn != "all") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -323,7 +333,7 @@
                 displayAssetsSort(sortBtn);
             }
         })
-
+    
         laptopBtn.addEventListener("click", e => {
             if (sortBtn != "laptop") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -331,7 +341,7 @@
                 displayAssetsSort(sortBtn);
             }
         })
-
+    
         pcBtn.addEventListener("click", e => {
             if (sortBtn != "pc") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -339,7 +349,7 @@
                 displayAssetsSort(sortBtn);
             }
         })
-
+    
         monitorBtn.addEventListener("click", e => {
             if (sortBtn != "monitor") {
                 document.getElementById("asset-tbody").innerHTML = "";          
@@ -347,10 +357,10 @@
                 displayAssetsSort(sortBtn);
             }
         })
-
-
+    
+    
         search.addEventListener("input", e=> {
-
+    
             if (search.value == '') {
                 sortBtn = "all";
                 displayAssetsSort(sortBtn);
@@ -360,29 +370,29 @@
                 displayAssetsSearch(search.value.toLowerCase());
             }
         })
-
-
+    
+    
         function displayAssetsSort(sortBtn) {
             var counter = 0;
-        
+    
             Object.keys(allAssetsArray).forEach(function(key) {
-
+    
                 if (allAssetsArray[key]["type"].toLowerCase() == sortBtn || sortBtn == "all"){
-
+    
                     if (allAssetsArray[key]["status"] == "active") {
                         var color = "green";
                     }
-
+    
                     if (allAssetsArray[key]["status"] == "inactive") {
                         var color = "firebrick";
                     }
-
+    
                     if (allAssetsArray[key]["status"] == "not in use") {
                         var color = "gray";
                     }
-
+    
                     var created = new Date(allAssetsArray[key]["created_at"]);
-                    var row = tbody.insertRow(counter);
+                    var row = tbody.insertRow();
             
                     row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
                     row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
@@ -390,19 +400,19 @@
                     row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
                     row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
                     row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
-                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-box' style='color:" + color + "'></i>";
-                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box' onclick='editAsset(" + counter + ")'></i>";
-
+                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick='editAsset(" + counter + ")'></i>";
+    
                     counter += 1;
                 }
             })
         }
-
+    
         function displayAssetsSearch(searchQuery) {
             var counter = 0;
-        
+    
             Object.keys(allAssetsArray).forEach(function(key) {
-
+    
                 if (allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["make"].toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["model"].toLowerCase().includes(searchQuery) ||
@@ -410,21 +420,21 @@
                     allAssetsArray[key]["user"].toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["created_at"].toLowerCase().includes(searchQuery)
                 ){
-
+    
                     if (allAssetsArray[key]["status"] == "active") {
                         var color = "green";
                     }
-
+    
                     if (allAssetsArray[key]["status"] == "inactive") {
                         var color = "firebrick";
                     }
-
+    
                     if (allAssetsArray[key]["status"] == "not in use") {
                         var color = "gray";
                     }
-
+    
                     var created = new Date(allAssetsArray[key]["created_at"]);
-                    var row = tbody.insertRow(counter);
+                    var row = tbody.insertRow();
             
                     row.insertCell(0).innerHTML = allAssetsArray[key]["type"];
                     row.insertCell(1).innerHTML = allAssetsArray[key]["make"];
@@ -432,19 +442,27 @@
                     row.insertCell(3).innerHTML = allAssetsArray[key]["location"];
                     row.insertCell(4).innerHTML = allAssetsArray[key]["user"];
                     row.insertCell(5).innerHTML = created.toLocaleDateString('en-US');
-                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-box' style='color:" + color + "'></i>";
-                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-box' onclick='editAsset(" + counter + ")'></i>";
-
+                    row.insertCell(6).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
+                    row.insertCell(7).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick='editAsset(" + counter + ")'></i>";
+    
                     counter += 1;
                 }
             })
         }
-
+        
         function editAsset(tr) {
-            const table = document.getElementsByClass("assets-table");
-            console.log("test");
-        }
+            var counter = 0;
 
+            Object.keys(allAssetsArray).forEach(function(key) {
+                if (counter == tr) {
+                    console.log(allAssetsArray[key]);
+                } 
+
+                counter += 1;
+            })
+        }
+    
     </script>
+
 </body>
 </html>
