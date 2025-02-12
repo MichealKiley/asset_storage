@@ -113,6 +113,7 @@
 
 
         .table-wrapper {
+            position: relative;
             text-align: left;
             margin-left: auto;
             margin-right: auto;
@@ -121,13 +122,32 @@
             justify-content: center;
         }
 
+        .create-asset-btn{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .create-asset-btn button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            color: rgb(29, 30, 99);
+            background-color: transparent;
+            text-align: center;   
+            width: 35px;
+            height: 35px;
+            font-size: 30px;
+        }
 
         .table-wrapper .assets-table {
             border-collapse: collapse;
             font-size: 17px;
             margin-left: 0px;
             margin-right: 0px;
-            margin-top: 25px;
+            margin-top: 35px;
         }
 
         .assets-table td {
@@ -177,7 +197,7 @@
 
         .overlay-container {
             position: fixed;
-            display: flex;
+            display: none;
             justify-content: center;
             flex-direction: column;
             align-items:center;
@@ -187,13 +207,13 @@
             z-index: 2;
         }
 
-        #edit-form  {
+        .asset-form  {
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 45%;
+            width: 40%;
             height: 65%;
             background-color: white;
             border-radius: 25px;
@@ -201,21 +221,21 @@
         }
 
 
-        #edit-text-wrapper {
+        .edit-text-wrapper {
             display: flex;
             flex-direction: column;
             text-align: center;
             margin: 5px;
         }
 
-        #edit-select-wrapper {
+        .edit-select-wrapper {
             display: flex;
             flex-direction: row;
             text-align: center;
             margin: 5px;
         }
 
-        #edit-btn-wrapper {
+        .edit-btn-wrapper {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -241,7 +261,7 @@
             display: flex;
             flex-direction: row;
             text-align: center;
-            margin: 5px;
+            margin-top: 15px;
         }
 
 
@@ -255,6 +275,7 @@
             padding: 15px;
             width: 350px;
             height: 35px;
+            font-size: 15px;
         }
 
         #edit-text-field input::placeholder {
@@ -273,7 +294,7 @@
             font-size: 15px;
         }
 
-        #save-asset-btn {
+        #blue-btn {
             border: none;
             outline: none;
             border-radius: 10px;
@@ -286,7 +307,7 @@
             font-size: 15px;
         }
 
-        #cancel-btn {
+        #grey-btn {
             border: none;
             outline: none;
             border-radius: 10px;
@@ -304,14 +325,12 @@
             border-radius: 10px;
             color: rgb(255, 0, 0);
             text-align: center;   
-            background-color: white;
+            background-color: transparent;
             width: 50px;
             height: 40px;
             margin: 10px;
             font-size: 25px;
         }
-
-
 
         #close-overlay button {
             position: absolute;
@@ -319,12 +338,36 @@
             right: 0;
             border: none;
             outline: none;
-            background-color: rgb(255, 255, 255);
+            background-color: transparent;
             color: rgb(29, 30, 99);
             margin: 10px;
             font-size: 45px;
         }
 
+        .delete-asset-overlay {
+            position: fixed;
+            display: none;
+            justify-content: center;
+            flex-direction: column;
+            align-items:center;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .3);
+            z-index: 2;
+        }
+
+        .delete-asset-wrapper  {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 35%;
+            height: 20%;
+            background-color: white;
+            border-radius: 25px;
+            padding: 10px;
+        }
 
         
 
@@ -341,71 +384,85 @@
     {{-- edit popup --}}
     
     <div class="overlay-container">
-        <form action="" id="edit-form">
+        <form action="" class="asset-form">
 
-            <h3>Asset Id </h3>
+            <select hidden name="request-type" id="request-type">
+                <option value="create"></option>
+                <option value="modify"></option>
+                <option value="delete"></option>
+            </select>
+
+            <h3 id="asset-number-h3"></h3>
 
             <div id="close-overlay">
                 <button type="button" onclick="editAsset(undefined,'close')"><i class='bx bx-x'></i></button>
             </div>
 
-            <div id="edit-select-wrapper">
+            <div class="edit-select-wrapper">
                 <div id="edit-select-field">
                     <label>Type</label>
-                    <select name="type">
-                        <option value="laptop">Laptop</option>
-                        <option value="pc">PC</option>
-                        <option value="monitor">Monitor</option>
+                    <select name="type" id="edit-type">
+                        <option value="Laptop">Laptop</option>
+                        <option value="PC">PC</option>
+                        <option value="Monitor">Monitor</option>
                     </select>
                 </div>
                 <div id="edit-select-field">
                     <label>Status</label>
-                    <select name="status">
+                    <select name="status" id="edit-status">
                         <option value="active">Active</option>
-                        <option value="not-in-use">Not in use</option>
+                        <option value="not in use">Not in use</option>
                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
             </div>
 
-            <div id="edit-text-wrapper">
+            <div class="edit-text-wrapper">
                 <div id="edit-text-field">
                     <label>Make</label>
-                    <input type="text" name="make" placeholder="Make">
+                    <input type="text" name="make" id="edit-make" placeholder="Make">
                 </div>
                 <div id="edit-text-field">
                     <label>Model</label>
-                    <input type="text" name="model" placeholder="Model">
+                    <input type="text" name="model" id="edit-model" placeholder="Model">
                 </div>
                 <div id="edit-text-field">
                     <label>Location</label>
-                    <input type="text" name="location" placeholder="Location">
+                    <input type="text" name="location" id="edit-location" placeholder="Location">
                 </div>
                 <div id="edit-text-field">
                     <label>User</label>
-                    <input type="text" name="user" placeholder="User">
+                    <input type="text" name="user" id="edit-user" placeholder="User">
                 </div>
             </div>
 
-            <div id="edit-btn-wrapper">
+            <div class="edit-btn-wrapper">
                 <div id="edit-btn-field">
-                    <button type="submit" name="save-changes" id="save-asset-btn">Save</button>
-                    <button type="submit" name="cancel-changes" id="cancel-btn" onclick="editAsset(undefined,'close')">Cancel</button>
+                    <button type="submit" name="save-changes" id="blue-btn">Save</button>
+                    <button type="button" name="cancel-changes" id="grey-btn" onclick="editAsset(undefined,'close')">Cancel</button>
                 </div>
             </div>
 
             <div id="delete-asset-btn">
                 <button type="button" name="delete-asset"><i class='bx bx-trash'></i></button>
             </div>
+
+            <div class="delete-asset-overlay">
+                <div id="delete-asset-wrapper">
+                    <h2>Confirm asset deletion</h2>
+                    <div class="edit-btn-wrapper">
+                        <div id="edit-btn-field">
+                            <button type="submit" name="save-changes" id="blue-btn">Yes</button>
+                            <button type="submit" name="cancel-changes" id="grey-btn">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
         </form>
     </div>
 
     <div class="container">
-
-        {{-- <div class="header">
-            <h1>Assets</h1>
-        </div> --}}
 
         {{-- Sorting tools --}}
         <div class="toggleBtn">
@@ -419,7 +476,13 @@
             <input type="search" id="search-bar" placeholder="Search for Asset" value=""></input>
         </div>
 
+
+
         <div class="table-wrapper">
+
+            <div class="create-asset-btn">
+                <button><i class='bx bxs-plus-square' ></i></button>
+            </div>
 
             <table class="assets-table">
                 <thead>
@@ -623,7 +686,13 @@
 
                 Object.keys(allAssetsArray).forEach(function(key) {
                     if (counter == tr) {
-                        console.log(allAssetsArray[key]);
+                        document.getElementById("asset-number-h3").textContent = "TN-" + allAssetsArray[key]["id"];
+                        document.getElementById("edit-type").value = allAssetsArray[key]["type"];
+                        document.getElementById("edit-make").value = allAssetsArray[key]["make"];
+                        document.getElementById("edit-model").value = allAssetsArray[key]["model"];
+                        document.getElementById("edit-location").value = allAssetsArray[key]["location"];
+                        document.getElementById("edit-user").value = allAssetsArray[key]["user"];
+                        document.getElementById("edit-status").value = allAssetsArray[key]["status"];
                     } 
 
                     counter += 1;
@@ -634,9 +703,11 @@
             if (tr == undefined && action == "close") {
                 document.getElementsByClassName("overlay-container")[0].style.display = "none";
             }
-
-
         }
+
+        function
+
+
 
         function remoteLink(tr,username, model) {
             window.open("https://neuco.screenconnect.com/Host#Access/All%20Machines%20by%20Company/" + username + " " + model + "", '_blank');
