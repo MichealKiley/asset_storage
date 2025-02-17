@@ -13,7 +13,7 @@ class AssetController extends Controller
     public function assetAllView()
     {
         // Pulling assets from db
-        $assets = assets::get();
+        $assets = Asset::get();
 
 
         return view("assetAllView", ['all' => $assets]);
@@ -21,27 +21,56 @@ class AssetController extends Controller
 
     public function postAsset(Request $request)
     {
+
+        // validating form inputs
         $assetData = $request->validate([
             "request-type" => 'required',
+            "delete-asset" => 'nullable',
+            'id' => 'nullable',
             'type' => 'required',
             'make' => 'required',
             'model' => 'required',
             'location' => 'required',
+            'user' => 'nullable',
             'status' => 'required'
         ]);
 
-        if ($assetData["request-type"] == "add") {
 
-            unset($assetData["request-type"]);
+        // delete existing asset
+        if ($assetData["delete-asset"] == "yes") {
 
-            foreach ($assetData as $key => $value) {
-                echo $key . " : " . $value . "<br>";
-            }
-
-            assets::
-
+            $id = $assetData["id"];
+            $Asset = Asset::find($id);
+            $Asset->delete();
         }
 
-        return "dolla dolla bills y'all";
+        // create new asset
+        elseif ($assetData["request-type"] == "add") {
+
+            unset($assetData["request-type"]);
+            unset($assetData["delete-asset"]);
+            unset($assetData["id"]);
+
+            Asset::create($assetData);
+        }
+
+        // edit existing asset
+        elseif ($assetData["request-type"] == "edit") {
+
+            $id = $assetData["id"];
+
+            $Asset = Asset::find($id);
+            $Asset->type = $assetData["type"];
+            $Asset->make = $assetData["make"];
+            $Asset->model = $assetData["model"];
+            $Asset->location = $assetData["location"];
+            $Asset->user = $assetData["user"];
+            $Asset->status = $assetData["status"];
+            $Asset->update();
+        }
+
+
+        // redirect to assets page
+        return redirect('/assets');
     }
 }

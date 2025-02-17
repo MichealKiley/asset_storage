@@ -309,6 +309,10 @@
             font-size: 15px;
         }
 
+        #delete-asset-btn {
+            display: block;
+        }
+
         #delete-asset-btn button{
             border: none;
             outline: none;
@@ -346,7 +350,7 @@
             z-index: 2;
         }
 
-        .delete-asset-wrapper  {
+        #delete-asset-wrapper  {
             position: relative;
             display: flex;
             flex-direction: column;
@@ -376,8 +380,9 @@
             @csrf
 
             <input type="text" id="request-type" name="request-type" value="" hidden> 
-
-            <h3 id="asset-number-h3"></h3>
+            <input type="text" id="delete-asset" name="delete-asset" value="no" hidden> 
+            <input type="text" id="asset-id" name="id" value="" hidden>
+            <h3 id="asset-id-display"></h3>
 
             <div id="close-overlay">
                 <button type="button" onclick="editAsset(undefined,'close')"><i class='bx bx-x'></i></button>
@@ -424,12 +429,12 @@
             <div class="edit-btn-wrapper">
                 <div id="edit-btn-field">
                     <button type="submit" name="save-changes" id="blue-btn">Save</button>
-                    <button type="button" name="cancel-changes" id="grey-btn" onclick="editAsset(undefined,'close')">Cancel</button>
+                    <button type="button" name="cancel-changes" id="grey-btn" onclick="editAsset(undefined,'close',undefined)">Cancel</button>
                 </div>
             </div>
 
             <div id="delete-asset-btn">
-                <button type="button" name="delete-asset"><i class='bx bx-trash'></i></button>
+                <button type="button" onclick="editAsset(undefined,'delete-open',undefined,undefined)"><i class='bx bx-trash'></i></button>
             </div>
 
             <div class="delete-asset-overlay">
@@ -437,8 +442,8 @@
                     <h2>Confirm asset deletion</h2>
                     <div class="edit-btn-wrapper">
                         <div id="edit-btn-field">
-                            <button type="submit" name="save-changes" id="blue-btn">Yes</button>
-                            <button type="submit" name="cancel-changes" id="grey-btn">No</button>
+                            <button type="button" id="blue-btn" onclick="editAsset(undefined,undefined,undefined,'yes')">Yes</button>
+                            <button type="button" id="grey-btn" onclick="editAsset(undefined,'delete-close',undefined,undefined)">No</button>
                         </div>
                     </div>
                 </div>
@@ -504,7 +509,37 @@
         var tbody = document.getElementById("asset-tbody");
         var allAssetsArray = <?php echo json_encode($all); ?>;
     
-    
+
+
+        // sort table function
+        function sortTable($key, $order) {
+
+            if (isNaN(allAssetsArray[0][$key])) {
+                if ($order == "ascend") {
+                    return allAssetsArray = allAssetsArray.sort((a,b) => a[$key].localeCompare(b[$key]));
+                }
+                if ($order == "descend") {
+                    return allAssetsArray = allAssetsArray.sort((a,b) => b[$key].localeCompare(a[$key]));
+                }
+            }
+
+            if (!isNaN(allAssetsArray[0][$key])) {
+                if ($order == "ascend") {
+                    return allAssetsArray = allAssetsArray.sort((a,b) => a[$key] - b[$key]);
+                }
+                if ($order == "descend") {
+                    return allAssetsArray = allAssetsArray.sort((a,b) => b[$key] - a[$key]);
+                }
+            }
+        }
+
+
+        
+        
+
+
+
+
         // view all assets on page opening
         if (sortBtn == null) {
             sortBtn = "all";
@@ -608,6 +643,7 @@
 
                 var assetId = 'TN-' + allAssetsArray[key]["id"];
     
+                // converting items to lowercase
                 if (assetId.toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["make"].toLowerCase().includes(searchQuery) ||
@@ -617,6 +653,7 @@
                     allAssetsArray[key]["created_at"].toLowerCase().includes(searchQuery)
                 ){
     
+                    // styling status button
                     if (allAssetsArray[key]["status"] == "active") {
                         var color = "green";
                     }
@@ -629,6 +666,7 @@
                         var color = "gray";
                     }
     
+                    // creating table rows
                     var created = new Date(allAssetsArray[key]["created_at"]);
                     var row = tbody.insertRow();
             
@@ -648,19 +686,21 @@
         }
         
         // edit asset function
-        function editAsset(tr,action,type) {
+        function editAsset(tr,action,type,assetDelete) {
 
             // open edit overlay
-            if (tr != undefined && action == "open" && type == 'edit') { 
+            if (action == "open" && type == 'edit') { 
 
                 document.getElementsByClassName("overlay-container")[0].style.display = "flex";
                 document.getElementById("request-type").setAttribute("value","edit");
 
                 var counter = 0;
 
+                // populate existing values
                 Object.keys(allAssetsArray).forEach(function(key) {
                     if (counter == tr) {
-                        document.getElementById("asset-number-h3").textContent = "Edit: TN-" + allAssetsArray[key]["id"];
+                        document.getElementById("asset-id-display").textContent = "TN-" + allAssetsArray[key]["id"];
+                        document.getElementById("asset-id").setAttribute("value", allAssetsArray[key]["id"]);
                         document.getElementById("edit-type").value = allAssetsArray[key]["type"];
                         document.getElementById("edit-make").value = allAssetsArray[key]["make"];
                         document.getElementById("edit-model").value = allAssetsArray[key]["model"];
@@ -675,11 +715,15 @@
 
 
             // open add overlay
-            if (tr == undefined && action == "open" && type == 'add') {
+            if (action == "open" && type == 'add') {
+
+                // open popup and populate header
                 document.getElementsByClassName("overlay-container")[0].style.display = "flex";
-                document.getElementById("asset-number-h3").textContent = "Add Asset";
+                document.getElementById("delete-asset-btn").style.display = "none";
+                document.getElementById("asset-id-display").textContent = "Add Asset";
                 document.getElementById("request-type").setAttribute("value","add");
 
+                // clearing data for new asset
                 document.getElementById("edit-type").value = "";
                 document.getElementById("edit-make").value = "";
                 document.getElementById("edit-model").value = "";
@@ -689,9 +733,26 @@
             }
 
 
+            // delete asset open popup
+            if (action == 'delete-open') {
+                document.getElementsByClassName("delete-asset-overlay")[0].style.display = "flex";
+            }
+
+            // delete asset confirmation
+            if (assetDelete == 'yes') {
+                    document.getElementById("delete-asset").setAttribute("value","yes");
+                    document.getElementsByClassName("asset-form")[0].submit();
+                }
+
+            // delete asset cancel 
+            if (action == 'delete-close') {
+                document.getElementsByClassName("delete-asset-overlay")[0].style.display = "none";
+            }
+
+
 
             // close overlay
-            if (tr == undefined && action == "close") {
+            if (action == "close") {
                 document.getElementsByClassName("overlay-container")[0].style.display = "none";
                 document.getElementById("request-type").setAttribute("value","");
             }
