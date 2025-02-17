@@ -12,9 +12,8 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js').setPublicPath('public/js');
-    // .js('resources/js/assets.js').setPublicPath('js/assets.js');
-    // .postCss('resources/css/app.css', 'public/css', [
-    //     //
-    // ]);
+mix.js('resources/js/assets.js').setPublicPath('js/assets.js');
+mix.postCss('resources/css/app.css', 'public/css');
+
 
     

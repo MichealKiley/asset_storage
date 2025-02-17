@@ -7,6 +7,8 @@ const search = document.getElementById("search-bar");
 
 var sortBtn = null;
 var tbody = document.getElementById("asset-tbody");
+var allAssetsArray = document.getElementById("allAssetsArray");
+console.log(allAssetsArray.innerHTML);
 
 
 // view all assets on page opening

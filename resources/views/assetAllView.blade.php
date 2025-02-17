@@ -10,18 +10,8 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 
-    {{-- <script src="{{ asset('js/app.js') }}"></script>; --}}
+    {{-- <script src="{{ asset('js/assets.js') }}"></script>; --}}
 
-    <script>
-
-        function searchBar() {
-            var searchBar = document.getElementById('search-bar');
-        
-
-        ////////////// NEED TO PARSE THROUGH PHP ARRAY IN JS AND HIDE ALL OTHER ASSETS
-            
-        }
-    </script>
 
     <style>
         * {
@@ -369,12 +359,9 @@
             padding: 10px;
         }
 
-        
-
-
     </style>
 
-    <?php $all = $all ?>
+    <?php $all = $all; ?>
 
 </head>
 
@@ -384,7 +371,7 @@
     {{-- edit popup --}}
     
     <div class="overlay-container">
-        <form action="" class="asset-form">
+        <form action="" class="asset-form" name="" >
 
             <select hidden name="request-type" id="request-type">
                 <option value="create"></option>
@@ -481,7 +468,7 @@
         <div class="table-wrapper">
 
             <div class="create-asset-btn">
-                <button><i class='bx bxs-plus-square' ></i></button>
+                <button onclick="editAsset(undefined,'open','add')"><i class='bx bxs-plus-square' ></i></button>
             </div>
 
             <table class="assets-table">
@@ -495,7 +482,6 @@
                         <th>User</th>
                         <th>Created</th>
                         <th>Status</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -609,14 +595,7 @@
                     row.insertCell(5).innerHTML = allAssetsArray[key]["user"];
                     row.insertCell(6).innerHTML = created.toLocaleDateString('en-US');
                     row.insertCell(7).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
-                    row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open')\"></i>";
-
-                    if (allAssetsArray[key]["type"].toLowerCase() != "monitor") {
-                        row.insertCell(9).innerHTML = "<i class='bx bx-desktop' id='edit-btn' onclick=\"remoteLink(" + 
-                        counter + ",'" + allAssetsArray[key]["user"] + "','" + allAssetsArray[key]["model"] + "'" + ")\"></i>";
-                    } else {
-                        row.insertCell(9).innerHTML = ""
-                    }
+                    row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open', 'edit')\"></i>";
     
                     counter += 1;
                 }
@@ -628,8 +607,11 @@
             var counter = 0;
     
             Object.keys(allAssetsArray).forEach(function(key) {
+
+                var assetId = 'TN-' + allAssetsArray[key]["id"];
     
-                if (allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
+                if (assetId.toLowerCase().includes(searchQuery) ||
+                    allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["make"].toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["model"].toLowerCase().includes(searchQuery) ||
                     allAssetsArray[key]["location"].toLowerCase().includes(searchQuery) ||
@@ -660,14 +642,7 @@
                     row.insertCell(5).innerHTML = allAssetsArray[key]["user"];
                     row.insertCell(6).innerHTML = created.toLocaleDateString('en-US');
                     row.insertCell(7).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
-                    row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open')\"></i>";
-
-                    if (allAssetsArray[key]["type"].toLowerCase() != "monitor") {
-                        row.insertCell(9).innerHTML = "<i class='bx bx-desktop' id='edit-btn' onclick=\"remoteLink(" + 
-                        counter + ",'" + allAssetsArray[key]["user"] + "','" + allAssetsArray[key]["model"] + "'" + ")\"></i>";
-                    } else {
-                        row.insertCell(9).innerHTML = ""
-                    }
+                    row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open', 'edit')\"></i>";
     
                     counter += 1;
                 }
@@ -675,18 +650,19 @@
         }
         
         // edit asset function
-        function editAsset(tr,action) {
+        function editAsset(tr,action,type) {
 
-            // open overlay
-            if (tr != undefined && action == "open") { 
+            // open edit overlay
+            if (tr != undefined && action == "open" && type == 'edit') { 
 
                 document.getElementsByClassName("overlay-container")[0].style.display = "flex";
+                document.getElementsByClassName("asset-form")[0].setAttribute("name","edit");
 
                 var counter = 0;
 
                 Object.keys(allAssetsArray).forEach(function(key) {
                     if (counter == tr) {
-                        document.getElementById("asset-number-h3").textContent = "TN-" + allAssetsArray[key]["id"];
+                        document.getElementById("asset-number-h3").textContent = "Edit: TN-" + allAssetsArray[key]["id"];
                         document.getElementById("edit-type").value = allAssetsArray[key]["type"];
                         document.getElementById("edit-make").value = allAssetsArray[key]["make"];
                         document.getElementById("edit-model").value = allAssetsArray[key]["model"];
@@ -699,21 +675,30 @@
                 })
             }
 
+
+            // open add overlay
+            if (tr == undefined && action == "open" && type == 'add') {
+                document.getElementsByClassName("overlay-container")[0].style.display = "flex";
+                document.getElementById("asset-number-h3").textContent = "Add Asset";
+                document.getElementsByClassName("asset-form")[0].setAttribute("name","add");
+
+                document.getElementById("edit-type").value = "";
+                document.getElementById("edit-make").value = "";
+                document.getElementById("edit-model").value = "";
+                document.getElementById("edit-location").value = "";
+                document.getElementById("edit-user").value = "";
+                document.getElementById("edit-status").value = "";
+            }
+
+
+
             // close overlay
             if (tr == undefined && action == "close") {
                 document.getElementsByClassName("overlay-container")[0].style.display = "none";
+                document.getElementsByClassName("asset-form")[0].setAttribute("name","");
             }
         }
-
-        function
-
-
-
-        function remoteLink(tr,username, model) {
-            window.open("https://neuco.screenconnect.com/Host#Access/All%20Machines%20by%20Company/" + username + " " + model + "", '_blank');
-        }
-    
-
+        
     </script>
 
 </body>
