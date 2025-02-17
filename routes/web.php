@@ -29,6 +29,4 @@ use App\Http\Controllers\LoginController;
 
 // asset view
 Route::get('/assets', [AssetController::class, 'assetAllView']);
-Route::get('/assets/{asset}', [AssetController::class, 'assetSingleView']);
-
-
+Route::post('/post-asset', [AssetController::class, 'postAsset']);

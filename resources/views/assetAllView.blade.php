@@ -371,13 +371,11 @@
     {{-- edit popup --}}
     
     <div class="overlay-container">
-        <form action="" class="asset-form" name="" >
+        <form action="/post-asset" method="POST" class="asset-form">
 
-            <select hidden name="request-type" id="request-type">
-                <option value="create"></option>
-                <option value="modify"></option>
-                <option value="delete"></option>
-            </select>
+            @csrf
+
+            <input type="text" id="request-type" name="request-type" value="" hidden> 
 
             <h3 id="asset-number-h3"></h3>
 
@@ -656,7 +654,7 @@
             if (tr != undefined && action == "open" && type == 'edit') { 
 
                 document.getElementsByClassName("overlay-container")[0].style.display = "flex";
-                document.getElementsByClassName("asset-form")[0].setAttribute("name","edit");
+                document.getElementById("request-type").setAttribute("value","edit");
 
                 var counter = 0;
 
@@ -680,7 +678,7 @@
             if (tr == undefined && action == "open" && type == 'add') {
                 document.getElementsByClassName("overlay-container")[0].style.display = "flex";
                 document.getElementById("asset-number-h3").textContent = "Add Asset";
-                document.getElementsByClassName("asset-form")[0].setAttribute("name","add");
+                document.getElementById("request-type").setAttribute("value","add");
 
                 document.getElementById("edit-type").value = "";
                 document.getElementById("edit-make").value = "";
@@ -695,7 +693,7 @@
             // close overlay
             if (tr == undefined && action == "close") {
                 document.getElementsByClassName("overlay-container")[0].style.display = "none";
-                document.getElementsByClassName("asset-form")[0].setAttribute("name","");
+                document.getElementById("request-type").setAttribute("value","");
             }
         }
         
