@@ -171,6 +171,17 @@
             padding: 7px;
         }
 
+        .assets-table th i {
+            background-color: transparent;
+            color: transparent;
+        }
+
+        .assets-table th:hover i {
+            background-color: transparent;
+            color:rgb(255, 255, 255);
+        }
+
+
         #status-btn {
             display: flex;
             justify-content: center;
@@ -477,14 +488,14 @@
             <table class="assets-table">
                 <thead>
                     <tr>
-                        <th>Key</th>
-                        <th>Type</th>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Location</th>
-                        <th>User</th>
-                        <th>Created</th>
-                        <th>Status</th>
+                        <th id="test" onclick="sortTable('id','descend')"> Key <i class='bx bxs-chevron-down' ></i></th>
+                        <th>Type <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
+                        <th>Make <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
+                        <th>Model <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
+                        <th>Location <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
+                        <th>User <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
+                        <th>Created <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
+                        <th>Status <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -508,7 +519,7 @@
         var sortBtn = null;
         var tbody = document.getElementById("asset-tbody");
         var allAssetsArray = <?php echo json_encode($all); ?>;
-    
+
 
 
         // sort table function
@@ -534,18 +545,13 @@
         }
 
 
-        
-        
-
-
-
-
-        // view all assets on page opening
+        // default page sorting
         if (sortBtn == null) {
             sortBtn = "all";
+            // allAssetsArray = allAssetsArray.sort((a,b) => b["id"] - a["id"]);
             displayAssetsSort(sortBtn);
         }
-    
+
         // all button view
         allBtn.addEventListener("click", e => {
             if (sortBtn != "all") {
