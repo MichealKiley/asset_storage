@@ -474,7 +474,7 @@
         </div>
 
         <div class="search-bar">
-            <input type="search" id="search-bar" placeholder="Search for Asset" value=""></input>
+            <input oninput="sortSearch(document.getElementById('search-bar').value)" type="search" id="search-bar" placeholder="Search for Asset" value=""></input>
         </div>
 
 
@@ -570,7 +570,7 @@
                 }
             }
 
-
+            displayAssetsSort(sortBtn,keySort);
 
             return keySort;
         }
@@ -593,70 +593,135 @@
             displayAssetsSort(sortBtn);
         }
 
-
-
-
-    
-
-
-        // search asset view
-        search.addEventListener("input", e=> {
-    
-            if (search.value == '') {
-                sortBtn = "all";
+        // search field
+        function sortSearch(searchData) {
+            if (searchData == '') {
+                document.getElementById("asset-tbody").innerHTML = "";
+                sortBtn = 'all';
                 displayAssetsSort(sortBtn);
             } else {
                 document.getElementById("asset-tbody").innerHTML = "";          
                 sortBtn = "search";
-                displayAssetsSearch(search.value.toLowerCase(),keySort);
+                displayAssetsSearch(searchData.toLowerCase());
             }
-        })
-    
+        }
+
+
+        // // status check for asset display
+        // function dataStatusStyle(status){
+        //     var statusStyle = [];
+
+        //     if (status == "active") {
+        //         var color = "green";
+        //         var icon = "bx bxs-check-circle";
+        //     }
+
+        //     if (status == "inactive") {
+        //         var color = "firebrick";
+        //         var icon ='bx bxs-x-circle'
+        //     }
+
+        //     if (status == "not in use") {
+        //         var color = "gray";
+        //         var icon = 'bx bxs-minus-circle'
+        //     }
+            
+        //     statusStyle["icon"] = icon;
+        //     statusStyle["color"] = color;
+        //     return statusStyle;
+        // }
+
+        function buildAssetTable(formattedAssetArray) {
+            var counter = 0;
+
+            Object.keys(formattedAssetArray).forEach(function(key) {
+
+                formattedAsset = formattedAssetArray[key][0];
+                status = formattedAsset["status"];
+
+                ////////////////////// Styling status //////////////////////
+                var statusStyle = [];
+
+                if (status == "active") {
+                    var color = "green";
+                    var icon = "bx bxs-check-circle";
+                }
+                if (status == "inactive") {
+                    var color = "firebrick";
+                    var icon ='bx bxs-x-circle'
+                }
+                if (status == "not in use") {
+                    var color = "gray";
+                    var icon = 'bx bxs-minus-circle'
+                }
+
+                statusStyle["icon"] = icon;
+                statusStyle["color"] = color;
+
+
+                ////////////////////// Creating Table //////////////////////
+
+
+                //////// Creating tr ///////
+                var created = new Date(formattedAsset["created_at"]);
+                var row = tbody.insertRow();
+
+                //////// Populating td ///////
+                row.insertCell(0).innerHTML = "TN-" + formattedAsset["id"];
+                row.insertCell(1).innerHTML = formattedAsset["type"];
+                row.insertCell(2).innerHTML = formattedAsset["make"];
+                row.insertCell(3).innerHTML = formattedAsset["model"];
+                row.insertCell(4).innerHTML = formattedAsset["location"];
+                row.insertCell(5).innerHTML = formattedAsset["user"];
+                row.insertCell(6).innerHTML = created.toLocaleDateString('en-US');
+                row.insertCell(7).innerHTML = "<i class='" + statusStyle["icon"] + "' id='status-btn' style='color:" + statusStyle["color"] + "'></i>";
+                row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open', 'edit')\"></i>";
+
+                counter += 1;
+
+            })
+        }
+
+
     
         // button sort asset view function
         function displayAssetsSort(sortBtn,sort) {
-            var counter = 0;
+
+            // setting variables
+            var formattedAssetArray = []
             allAssetsArray.sort(sort);
     
             Object.keys(allAssetsArray).forEach(function(key) {
     
                 if (allAssetsArray[key]["type"].toLowerCase() == sortBtn || sortBtn == "all"){
-    
-                    if (allAssetsArray[key]["status"] == "active") {
-                        var color = "green";
-                    }
-    
-                    if (allAssetsArray[key]["status"] == "inactive") {
-                        var color = "firebrick";
-                    }
-    
-                    if (allAssetsArray[key]["status"] == "not in use") {
-                        var color = "gray";
-                    }
-    
-                    var created = new Date(allAssetsArray[key]["created_at"]);
-                    var row = tbody.insertRow();
 
-                    row.insertCell(0).innerHTML = "TN-" + allAssetsArray[key]["id"];
-                    row.insertCell(1).innerHTML = allAssetsArray[key]["type"];
-                    row.insertCell(2).innerHTML = allAssetsArray[key]["make"];
-                    row.insertCell(3).innerHTML = allAssetsArray[key]["model"];
-                    row.insertCell(4).innerHTML = allAssetsArray[key]["location"];
-                    row.insertCell(5).innerHTML = allAssetsArray[key]["user"];
-                    row.insertCell(6).innerHTML = created.toLocaleDateString('en-US');
-                    row.insertCell(7).innerHTML = "<i class='bx bxs-check-circle' id='status-btn' style='color:" + color + "'></i>";
-                    row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open', 'edit')\"></i>";
-    
-                    counter += 1;
+                    formattedAssetArray.push([{
+                        id : allAssetsArray[key]["id"],
+                        type : allAssetsArray[key]["type"],
+                        make : allAssetsArray[key]["make"],
+                        model : allAssetsArray[key]["model"],
+                        location : allAssetsArray[key]["location"],
+                        user : allAssetsArray[key]["user"],
+                        created_at : allAssetsArray[key]["created_at"],
+                        status : allAssetsArray[key]["status"]
+                    }]);
+
                 }
             })
+
+            // console.log(formattedAssets);
+            buildAssetTable(formattedAssetArray);
         }
     
+
+
+
+
         // search sort asset view function
-        function displayAssetsSearch(searchQuery,sort) {
+        function displayAssetsSearch(searchQuery) {
             var counter = 0;
+            
             // allAssetsArray.sort(sort);
-            console.log(allAssetsArray.sort(sort))
     
             Object.keys(allAssetsArray).forEach(function(key) {
 
