@@ -488,14 +488,14 @@
             <table class="assets-table">
                 <thead>
                     <tr>
-                        <th id="test" onclick="sortTable('id','descend')"> Key <i class='bx bxs-chevron-down' ></i></th>
-                        <th>Type <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
-                        <th>Make <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
-                        <th>Model <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
-                        <th>Location <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
-                        <th>User <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
-                        <th>Created <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
-                        <th>Status <i id="sort-asc-desc" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('id')"> Key <i id="th-id" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('type')">Type <i id="th-type" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('make')">Make <i id="th-make" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('model')">Model <i id="th-model" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('location')">Location <i id="th-location" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('user')">User <i id="th-user" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('created')">Created <i id="th-created" class='bx bxs-chevron-down' ></i></th>
+                        <th onclick="sortTable('status')">Status <i id="th-status" class='bx bxs-chevron-down' ></i></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -518,39 +518,66 @@
     
         var sortBtn = null;
         var tbody = document.getElementById("asset-tbody");
-        var allAssetsArray = <?php echo json_encode($all); ?>;
-
+        allAssetsArray = <?php echo json_encode($all); ?>;
 
 
         // sort table function
         function sortTable($key, $order) {
 
-            if (isNaN(allAssetsArray[0][$key])) {
-                if ($order == "ascend") {
-                    return allAssetsArray = allAssetsArray.sort((a,b) => a[$key].localeCompare(b[$key]));
+            $icon = document.getElementById("th-" + $key).className;
+
+            if ($order == undefined) {
+                
+                if ($icon == "bx bxs-chevron-down") {
+                    $order = "ascend";
+                    $icon.className = "bx bxs-chevron-up";
                 }
-                if ($order == "descend") {
-                    return allAssetsArray = allAssetsArray.sort((a,b) => b[$key].localeCompare(a[$key]));
+
+                if ($icon == "bx bxs-chevron-up") {
+                    $order = "descend";
+                    $icon.className = "bx bxs-chevron-down";
                 }
             }
 
-            if (!isNaN(allAssetsArray[0][$key])) {
+
+            // clearing table
+            document.getElementById("asset-tbody").innerHTML = "";   
+            console.log($key + " : " + $order)
+            
+
+            // sorting non-number key
+            if (isNaN(allAssetsArray[0][$key])) {
                 if ($order == "ascend") {
-                    return allAssetsArray = allAssetsArray.sort((a,b) => a[$key] - b[$key]);
+                    keySort = (a,b) => a[$key].localeCompare(b[$key]);
                 }
                 if ($order == "descend") {
-                    return allAssetsArray = allAssetsArray.sort((a,b) => b[$key] - a[$key]);
+                    keySort = (a,b) => b[$key].localeCompare(a[$key]);
                 }
             }
+
+             // sorting number key
+            if (!isNaN(allAssetsArray[0][$key])) {
+                if ($order == "ascend") {
+                    keySort = (a,b) => a[$key] - b[$key];
+                }
+                if ($order == "descend") {
+                    keySort = (a,b) => b[$key] - a[$key];
+                }
+            }
+
+            // sorting table and pulling data
+            allAssetsArray.sort(keySort);
+            displayAssetsSort(sortBtn);
         }
 
 
         // default page sorting
         if (sortBtn == null) {
+            sortTable("id","descend");
             sortBtn = "all";
-            // allAssetsArray = allAssetsArray.sort((a,b) => b["id"] - a["id"]);
             displayAssetsSort(sortBtn);
         }
+
 
         // all button view
         allBtn.addEventListener("click", e => {
