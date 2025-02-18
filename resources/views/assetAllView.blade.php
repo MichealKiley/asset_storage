@@ -467,10 +467,10 @@
 
         {{-- Sorting tools --}}
         <div class="toggleBtn">
-            <button id="allToggle">All</button>
-            <button id="laptopToggle">Laptop</button>
-            <button id="pcToggle">PC</button>
-            <button id="monitorToggle">Monitor</button>
+            <button id="allToggle" onclick="sortToggle('all')">All</button>
+            <button id="laptopToggle" onclick="sortToggle('laptop')">Laptop</button>
+            <button id="pcToggle" onclick="sortToggle('pc')">PC</button>
+            <button id="monitorToggle" onclick="sortToggle('monitor')">Monitor</button>
         </div>
 
         <div class="search-bar">
@@ -493,8 +493,8 @@
                         <th onclick="sortTable('make')">Make <i id="th-make" class='bx bxs-chevron-down' ></i></th>
                         <th onclick="sortTable('model')">Model <i id="th-model" class='bx bxs-chevron-down' ></i></th>
                         <th onclick="sortTable('location')">Location <i id="th-location" class='bx bxs-chevron-down' ></i></th>
-                        <th onclick="sortTable('user')">User <i id="th-user" class='bx bxs-chevron-down' ></i></th>
-                        <th onclick="sortTable('created')">Created <i id="th-created" class='bx bxs-chevron-down' ></i></th>
+                        <th>User</th>
+                        <th onclick="sortTable('created_at')">Created <i id="th-created_at" class='bx bxs-chevron-down' ></i></th>
                         <th onclick="sortTable('status')">Status <i id="th-status" class='bx bxs-chevron-down' ></i></th>
                         <th></th>
                     </tr>
@@ -522,52 +522,57 @@
 
 
         // sort table function
-        function sortTable($key, $order) {
+        function sortTable(key, order) {
 
-            $icon = document.getElementById("th-" + $key).className;
+            // handling sort direction
+            if (order == undefined) {
+                var icon = document.getElementById("th-" + key).className;
 
-            if ($order == undefined) {
-                
-                if ($icon == "bx bxs-chevron-down") {
-                    $order = "ascend";
-                    $icon.className = "bx bxs-chevron-up";
+                if (icon == "bx bxs-chevron-down") {
+                    order = "ascend";
+                } 
+                else  if (icon == "bx bxs-chevron-up") {
+                    order = "descend";
                 }
 
-                if ($icon == "bx bxs-chevron-up") {
-                    $order = "descend";
-                    $icon.className = "bx bxs-chevron-down";
-                }
+            }
+
+            // changing icon
+            if (order == "descend") {
+                document.getElementById("th-" + key).className = "bx bxs-chevron-down";
+            }
+
+            else if (order == "ascend") {
+                document.getElementById("th-" + key).className = "bx bxs-chevron-up";
             }
 
 
             // clearing table
             document.getElementById("asset-tbody").innerHTML = "";   
-            console.log($key + " : " + $order)
-            
 
             // sorting non-number key
-            if (isNaN(allAssetsArray[0][$key])) {
-                if ($order == "ascend") {
-                    keySort = (a,b) => a[$key].localeCompare(b[$key]);
+            if (isNaN(allAssetsArray[0][key])) {
+                if (order == "ascend") {
+                    keySort = (a,b) => a[key].localeCompare(b[key]);
                 }
-                if ($order == "descend") {
-                    keySort = (a,b) => b[$key].localeCompare(a[$key]);
+                if (order == "descend") {
+                    keySort = (a,b) => b[key].localeCompare(a[key]);
                 }
             }
 
              // sorting number key
-            if (!isNaN(allAssetsArray[0][$key])) {
-                if ($order == "ascend") {
-                    keySort = (a,b) => a[$key] - b[$key];
+            if (!isNaN(allAssetsArray[0][key])) {
+                if (order == "ascend") {
+                    keySort = (a,b) => a[key] - b[key];
                 }
-                if ($order == "descend") {
-                    keySort = (a,b) => b[$key] - a[$key];
+                if (order == "descend") {
+                    keySort = (a,b) => b[key] - a[key];
                 }
             }
 
-            // sorting table and pulling data
-            allAssetsArray.sort(keySort);
-            displayAssetsSort(sortBtn);
+
+
+            return keySort;
         }
 
 
@@ -579,43 +584,21 @@
         }
 
 
-        // all button view
-        allBtn.addEventListener("click", e => {
-            if (sortBtn != "all") {
-                document.getElementById("asset-tbody").innerHTML = "";          
-                sortBtn = "all";
-                displayAssetsSort(sortBtn);
-            }
-        })
+//////////////////////////////////////NEED TO REWRITE BETTER TOP/////////////////////////////////////////////////
+
+        // sort buttons
+        function sortToggle(sortKey) {
+            document.getElementById("asset-tbody").innerHTML = "";          
+            sortBtn = sortKey;
+            displayAssetsSort(sortBtn);
+        }
+
+
+
+
     
-        // laptop button view
-        laptopBtn.addEventListener("click", e => {
-            if (sortBtn != "laptop") {
-                document.getElementById("asset-tbody").innerHTML = "";          
-                sortBtn = "laptop";
-                displayAssetsSort(sortBtn);
-            }
-        })
-    
-        // pc button view
-        pcBtn.addEventListener("click", e => {
-            if (sortBtn != "pc") {
-                document.getElementById("asset-tbody").innerHTML = "";          
-                sortBtn = "pc";
-                displayAssetsSort(sortBtn);
-            }
-        })
-    
-        // monitor button view
-        monitorBtn.addEventListener("click", e => {
-            if (sortBtn != "monitor") {
-                document.getElementById("asset-tbody").innerHTML = "";          
-                sortBtn = "monitor";
-                displayAssetsSort(sortBtn);
-            }
-        })
-    
-    
+
+
         // search asset view
         search.addEventListener("input", e=> {
     
@@ -625,14 +608,15 @@
             } else {
                 document.getElementById("asset-tbody").innerHTML = "";          
                 sortBtn = "search";
-                displayAssetsSearch(search.value.toLowerCase());
+                displayAssetsSearch(search.value.toLowerCase(),keySort);
             }
         })
     
     
         // button sort asset view function
-        function displayAssetsSort(sortBtn) {
+        function displayAssetsSort(sortBtn,sort) {
             var counter = 0;
+            allAssetsArray.sort(sort);
     
             Object.keys(allAssetsArray).forEach(function(key) {
     
@@ -669,8 +653,10 @@
         }
     
         // search sort asset view function
-        function displayAssetsSearch(searchQuery) {
+        function displayAssetsSearch(searchQuery,sort) {
             var counter = 0;
+            // allAssetsArray.sort(sort);
+            console.log(allAssetsArray.sort(sort))
     
             Object.keys(allAssetsArray).forEach(function(key) {
 
@@ -717,6 +703,8 @@
                 }
             })
         }
+
+//////////////////////////////////////NEED TO REWRITE BETTER BOTTOM////////////////////////////////////////////////
         
         // edit asset function
         function editAsset(tr,action,type,assetDelete) {
