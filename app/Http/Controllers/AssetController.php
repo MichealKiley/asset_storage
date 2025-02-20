@@ -19,6 +19,8 @@ class AssetController extends Controller
         return view("assetAllView", ['all' => $assets]);
     }
 
+
+    // modify assets
     public function postAsset(Request $request)
     {
 
