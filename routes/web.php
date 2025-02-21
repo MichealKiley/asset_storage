@@ -16,9 +16,9 @@ use App\Http\Controllers\LoginController;
 */
 
 // catch root access and redirect to /login
-// Route::get('/', function () {
-//     return redirect('/login');
-// });
+Route::get('/', function () {
+    return redirect('/assets');
+});
 
 
 // // login controller
