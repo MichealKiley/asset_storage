@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AssetController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\StationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +20,10 @@ Route::get('/', function () {
     return redirect('/assets');
 });
 
-
-// // login controller
-// Route::get('/login', [LoginController::class, 'userLogin']);
-// Route::get('/create-user', [LoginController::class, 'userCreation']);
-
-
-
 // asset view
 Route::get('/assets', [AssetController::class, 'assetAllView']);
 Route::post('/post-asset', [AssetController::class, 'postAsset']);
+
+
+//station view
+Route::get('/stations', [StationController::class, 'stationAllView']);
