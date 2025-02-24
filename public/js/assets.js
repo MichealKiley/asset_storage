@@ -74,9 +74,9 @@ if (sortBtn == null) {
 }
 
 // sort buttons
-function sortToggle(Key) {
+function sortToggle(sortBy) {
     document.getElementById("asset-tbody").innerHTML = "";          
-    sortBtn = Key;
+    sortBtn = sortBy;
     displayAssetsSort(sortBtn,keySort);
 }
 
