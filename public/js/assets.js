@@ -27,10 +27,6 @@ function sortTable(key, order) {
     else if (order == "ascend") {
         document.getElementById("th-" + key).className = "bx bxs-chevron-up";
     }
-
-    //
-    var test = document.getElementsByClassName("assets-table")[0];
-    var test = test.getElementsByTagName("th");
     
 
     // clearing table
