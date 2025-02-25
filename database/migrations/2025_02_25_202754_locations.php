@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->foreignId("areas_id");
             $table->string('location')->unique();
-            $table->string('area');
             $table->string('dock')->nullable();
             $table->string('mnk')->nullable();
             $table->string('user')->nullable();

@@ -59,11 +59,11 @@
             <div class="edit-text-wrapper">
                 <div id="edit-text-field">
                     <label>Make</label>
-                    <input type="text" name="make" id="edit-make" placeholder="Make">
+                    <input type="text" name="make" id="edit-make" value="" placeholder="Make">
                 </div>
                 <div id="edit-text-field">
                     <label>Model</label>
-                    <input type="text" name="model" id="edit-model" placeholder="Model">
+                    <input type="text" name="model" id="edit-model" value="" placeholder="Model">
                 </div>
             </div>
 
@@ -79,7 +79,7 @@
 
                 <div id="edit-select-field">
                     <label>Location</label>
-                    <select name="loaction" id="edit-location">
+                    <select name="location" id="edit-locations_id">
 
                     </select>
                 </div>
@@ -90,7 +90,7 @@
             <div class="edit-text-wrapper">
                 <div id="edit-text-field">
                     <label>User</label>
-                    <input type="text" name="user" id="edit-user" placeholder="User">
+                    <input type="text" name="user" value="" id="edit-user" placeholder="User">
                 </div>
             </div>
 
@@ -169,7 +169,7 @@
 
     
 
-    <script> window.allAssetsArray = <?php echo json_encode($all); ?>;</script>
+    <script> window.allAssetsArray = <?php echo json_encode($assets); ?>;</script>
     <script type="text/javascript" src="js/assets.js"></script>
 
     

@@ -4,6 +4,7 @@ var tbody = document.getElementById("asset-tbody");
 var allAssetsArray = allAssetsArray;
 
 
+
 // sort table function
 function sortTable(key, order) {
 
@@ -150,7 +151,13 @@ function buildAssetTable(formattedAssetArray) {
     })
 }
 
-////////////////////////////////////// Display Quick Sort Assets /////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// Display Quick Sort Assets //////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 function displayAssetsSort(sortBtn,sort,searchQuery) {
 
@@ -163,18 +170,18 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
         Object.keys(allAssetsArray).forEach(function(key) {
 
 
+
             // checking for sort buttons
             if (allAssetsArray[key]["type"].toLowerCase() == sortBtn || sortBtn == "all"){
 
 
                 // replacing null fields with empty string
-                nullFieldChecker = ['id','type','make','model','location','area','user','created_at','status']
+                nullFieldChecker = ['id','type','make','model','locations_id','area','user','created_at','status']
                 nullFieldChecker.forEach(item => {
                     if (allAssetsArray[key][item] == null) {
                         allAssetsArray[key][item] = "";
                     }
                 })
-
 
                 // writing results to array
                 formattedAssetArray.push({
@@ -191,6 +198,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
             }
         })
     }
+
 
     /////////// sorting through assets for search feature ///////////
     else if (sortBtn == "search") {
@@ -238,12 +246,17 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// Edit and delete assets /////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 // edit asset function
 function editAsset(tr,action,type,assetDelete) {
+    
 
-    // open edit overlay
+    /////// open edit overlay ////////
     if (action == "open" && type == 'edit') { 
 
         // changing popup display to flex
@@ -251,7 +264,6 @@ function editAsset(tr,action,type,assetDelete) {
         document.getElementById("request-type").setAttribute("value","edit");
 
         // setting variables
-        var areaSelect = document.getElementById("edit-area");
         var counter = 0;
 
         // populate existing values
@@ -262,15 +274,17 @@ function editAsset(tr,action,type,assetDelete) {
 
             // filling form with existing values
             if (counter == tr) {
+
                 document.getElementById("asset-id-display").textContent = "TN-" + formattedAsset["id"];
                 document.getElementById("asset-id").setAttribute("value", formattedAsset["id"]);
                 document.getElementById("edit-type").value = formattedAsset["type"];
                 document.getElementById("edit-make").value = formattedAsset["make"];
                 document.getElementById("edit-model").value = formattedAsset["model"];
-                document.getElementById("edit-area").value = formattedAsset["area"];
-                document.getElementById("edit-location").value = formattedAsset["location"];
+                // document.getElementById("edit-area").value = formattedAsset["area"];
+                // document.getElementById("edit-locations_id").value = formattedAsset["location"];
                 document.getElementById("edit-user").value = formattedAsset["user"];
                 document.getElementById("edit-status").value = formattedAsset["status"];
+
             } 
 
             counter += 1;
@@ -288,7 +302,7 @@ function editAsset(tr,action,type,assetDelete) {
     }
 
 
-    // open add overlay
+    /////// open add overlay ////////
     if (action == "open" && type == 'add') {
 
         // open popup and populate header
@@ -297,14 +311,6 @@ function editAsset(tr,action,type,assetDelete) {
         document.getElementById("asset-id-display").textContent = "Add Asset";
         document.getElementById("request-type").setAttribute("value","add");
 
-        // clearing data for new asset
-        document.getElementById("edit-type").value = "";
-        document.getElementById("edit-make").value = "";
-        document.getElementById("edit-model").value = "";
-        document.getElementById("edit-area").value = "";
-        document.getElementById("edit-location").value = "";
-        document.getElementById("edit-user").value = "";
-        document.getElementById("edit-status").value = "";
     }
 
 
@@ -330,5 +336,15 @@ function editAsset(tr,action,type,assetDelete) {
     if (action == "close") {
         document.getElementsByClassName("overlay-container")[0].style.display = "none";
         document.getElementById("request-type").setAttribute("value","");
+
+        // clearing data for new asset
+        document.getElementById("edit-type").value = "";
+        document.getElementById("edit-make").value = "";
+        document.getElementById("edit-model").value = "";
+        // document.getElementById("edit-area").value = "";
+        // document.getElementById("edit-locations_id").value = "";
+        document.getElementById("edit-user").value = "";
+        document.getElementById("edit-status").value = "";
+
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Area;
 use App\Models\Asset;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Location extends Model
 {
@@ -13,7 +15,7 @@ class Location extends Model
 
     protected $fillable = [
         'type',
-        'area',
+        'areas_id',
         'location',
         'dock',
         'mnk',
@@ -23,5 +25,10 @@ class Location extends Model
     public function assets(): HasMany
     {
         return $this->hasMany(Asset::class);
+    }
+
+    public function area(): BelongsTo
+    {
+        return $this->belongsTo(Area::class);
     }
 }
