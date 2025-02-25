@@ -235,13 +235,6 @@ input[type="search"]::-webkit-search-cancel-button {
     margin: 5px;
 }
 
-#edit-select-field {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    margin: 5px;
-}
-
 #edit-select-field-slim {
     display: flex;
     flex-direction: column;
@@ -272,18 +265,6 @@ input[type="search"]::-webkit-search-cancel-button {
 
 #edit-text-field input::placeholder {
     color: rgb(206, 206, 206);
-}
-
-#edit-select-field select {
-    border: none;
-    outline: none;
-    border-radius: 10px;
-    background-color: rgb(29, 30, 99);
-    color: white;
-    text-align: center;   
-    width: 170px;
-    height: 35px;
-    font-size: 15px;
 }
 
 #edit-select-field-slim select {

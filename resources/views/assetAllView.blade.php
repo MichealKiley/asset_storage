@@ -10,7 +10,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <link href='{{asset('css/assets.css')}}' rel='stylesheet'>
-    <?php $all = $all; ?>
+    <?php $assets = $assets; ?>
 
 </head>
 
@@ -33,8 +33,10 @@
                 <button type="button" onclick="editAsset(undefined,'close')"><i class='bx bx-x'></i></button>
             </div>
 
-            <div class="edit-select-wrapper">
-                <div id="edit-select-field">
+
+            {{-- select fields --}}
+            <div class="edit-select-wrapper-row">
+                <div id="edit-select-field-slim">
                     <label>Type</label>
                     <select name="type" id="edit-type">
                         <option value="Laptop">Laptop</option>
@@ -42,7 +44,7 @@
                         <option value="Monitor">Monitor</option>
                     </select>
                 </div>
-                <div id="edit-select-field">
+                <div id="edit-select-field-slim">
                     <label>Status</label>
                     <select name="status" id="edit-status">
                         <option value="active">Active</option>
@@ -52,25 +54,48 @@
                 </div>
             </div>
 
+
+            {{-- text fields --}}
             <div class="edit-text-wrapper">
                 <div id="edit-text-field">
                     <label>Make</label>
-                    <input type="text" name="make" id="edit-make" placeholder="Make">
+                    <input type="text" name="make" id="edit-make" value="" placeholder="Make">
                 </div>
                 <div id="edit-text-field">
                     <label>Model</label>
-                    <input type="text" name="model" id="edit-model" placeholder="Model">
-                </div>
-                <div id="edit-text-field">
-                    <label>Location</label>
-                    <input type="text" name="location" id="edit-location" placeholder="Location">
-                </div>
-                <div id="edit-text-field">
-                    <label>User</label>
-                    <input type="text" name="user" id="edit-user" placeholder="User">
+                    <input type="text" name="model" id="edit-model" value="" placeholder="Model">
                 </div>
             </div>
 
+
+            {{-- select fields --}}
+            <div class="edit-select-wrapper-row">
+                <div id="edit-select-field">
+                    <label>Area</label>
+                    <select name="area" id="edit-area">
+
+                    </select>
+                </div>
+
+                <div id="edit-select-field">
+                    <label>Location</label>
+                    <select name="location" id="edit-locations_id">
+
+                    </select>
+                </div>
+            </div>
+
+
+            {{-- text fields --}}
+            <div class="edit-text-wrapper">
+                <div id="edit-text-field">
+                    <label>User</label>
+                    <input type="text" name="user" value="" id="edit-user" placeholder="User">
+                </div>
+            </div>
+
+
+            {{-- btn fields --}}
             <div class="edit-btn-wrapper">
                 <div id="edit-btn-field">
                     <button type="submit" name="save-changes" id="blue-btn">Save</button>
@@ -126,7 +151,8 @@
                         <th onclick="sortTable('type')">Type <i id="th-type" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('make')">Make <i id="th-make" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('model')">Model <i id="th-model" class='bx bxs-chevron-down'></i></th>
-                        <th onclick="sortTable('location')">Location <i id="th-location" class='bx bxs-chevron-down'></i></th>
+                        <th onclick="sortTable('locations_id')">Location <i id="th-locations_id" class='bx bxs-chevron-down'></i></th>
+                        <th onclick="sortTable('area')">Area <i id="th-area" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('user')">User<i id="th-user" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('created_at')">Created <i id="th-created_at" class='bx bxs-chevron-down' ></i></th>
                         <th onclick="sortTable('status')">Status <i id="th-status" class='bx bxs-chevron-down' ></i></th>
@@ -143,8 +169,21 @@
 
     
 
-    <script> window.allAssetsArray = <?php echo json_encode($all); ?>;</script>
-    <script type="text/javascript" src="js/assets.js"></script>
+    <script> window.allAssetsArray = <?php echo json_encode($assets); ?>;
+    
+    Object.keys(allAssetsArray).forEach(function(key) {
 
+        console.log(allAssetsArray[key]);
+
+    })
+    
+    
+    
+    
+    
+    </script>
+
+
+    
 </body>
 </html>

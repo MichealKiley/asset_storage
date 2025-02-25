@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->string('make');
-            $table->string('model');
-            $table->string('location')->nullable();
+            $table->foreignId("areas_id");
+            $table->string('location')->unique();
+            $table->string('dock')->nullable();
+            $table->string('mnk')->nullable();
             $table->string('user')->nullable();
-            // $table->foreignId('user_id');
             $table->timestamps();
-            $table->string('status');
         });
     }
 

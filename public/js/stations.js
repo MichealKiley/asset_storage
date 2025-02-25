@@ -4,10 +4,8 @@ var tbody = document.getElementById("asset-tbody");
 var allAssetsArray = allAssetsArray;
 
 
-
 // sort table function
 function sortTable(key, order) {
-
 
     // handling sort direction
     if (order == undefined) {
@@ -109,7 +107,6 @@ function buildAssetTable(formattedAssetArray) {
         formattedAsset = formattedAssetArray[key];
         status = formattedAsset["status"];
 
-
         // Styling status
         var statusStyle = [];
 
@@ -139,25 +136,18 @@ function buildAssetTable(formattedAssetArray) {
         row.insertCell(1).innerHTML = formattedAsset["type"];
         row.insertCell(2).innerHTML = formattedAsset["make"];
         row.insertCell(3).innerHTML = formattedAsset["model"];
-        row.insertCell(4).innerHTML = formattedAsset["area"];
-        row.insertCell(5).innerHTML = formattedAsset["location"];
-        row.insertCell(6).innerHTML = formattedAsset["user"];
-        row.insertCell(7).innerHTML = created.toLocaleDateString('en-US');
-        row.insertCell(8).innerHTML = "<i class='" + statusStyle["icon"] + "' id='status-btn' style='color:" + statusStyle["color"] + "'></i>";
-        row.insertCell(9).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open', 'edit')\"></i>";
+        row.insertCell(4).innerHTML = formattedAsset["location"];
+        row.insertCell(5).innerHTML = formattedAsset["user"];
+        row.insertCell(6).innerHTML = created.toLocaleDateString('en-US');
+        row.insertCell(7).innerHTML = "<i class='" + statusStyle["icon"] + "' id='status-btn' style='color:" + statusStyle["color"] + "'></i>";
+        row.insertCell(8).innerHTML = "<i class='bx bxs-edit' id='edit-btn' onclick=\"editAsset(" + counter + ", 'open', 'edit')\"></i>";
 
         counter += 1;
 
     })
 }
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////// Display Quick Sort Assets //////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+////////////////////////////////////// Display Quick Sort Assets /////////////////////////////////////////////////
 
 function displayAssetsSort(sortBtn,sort,searchQuery) {
 
@@ -169,14 +159,10 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
     if (sortBtn != "search"){
         Object.keys(allAssetsArray).forEach(function(key) {
 
-
-
-            // checking for sort buttons
             if (allAssetsArray[key]["type"].toLowerCase() == sortBtn || sortBtn == "all"){
 
-
                 // replacing null fields with empty string
-                nullFieldChecker = ['id','type','make','model','locations_id','area','user','created_at','status']
+                nullFieldChecker = ['id','type','make','model','location','user','created_at','status']
                 nullFieldChecker.forEach(item => {
                     if (allAssetsArray[key][item] == null) {
                         allAssetsArray[key][item] = "";
@@ -189,8 +175,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
                     type : allAssetsArray[key]["type"],
                     make : allAssetsArray[key]["make"],
                     model : allAssetsArray[key]["model"],
-                    area : allAssetsArray[key]["area"],
-                    location : allAssetsArray[key]["locations"]["location"],
+                    location : allAssetsArray[key]["location"],
                     user : allAssetsArray[key]["user"],
                     created_at : allAssetsArray[key]["created_at"],
                     status : allAssetsArray[key]["status"]
@@ -198,7 +183,6 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
             }
         })
     }
-
 
     /////////// sorting through assets for search feature ///////////
     else if (sortBtn == "search") {
@@ -208,7 +192,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
             var assetId = 'TN-' + allAssetsArray[key]["id"];
 
             // replacing null fields with empty string
-            nullFieldChecker = ['id','type','make','model','locations_id','area','user','created_at','status']
+            nullFieldChecker = ['id','type','make','model','location','user','created_at','status']
             nullFieldChecker.forEach(item => {
                 if (allAssetsArray[key][item] == null) {
                     allAssetsArray[key][item] = "";
@@ -220,8 +204,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
                 allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["make"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["model"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["locations"]["location"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["area"].toLowerCase().includes(searchQuery) ||
+                allAssetsArray[key]["location"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["user"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["created_at"].toLowerCase().includes(searchQuery)
             ){
@@ -231,8 +214,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
                     type : allAssetsArray[key]["type"],
                     make : allAssetsArray[key]["make"],
                     model : allAssetsArray[key]["model"],
-                    area : allAssetsArray[key]["area"],
-                    location : allAssetsArray[key]["locations"]["location"],
+                    location : allAssetsArray[key]["location"],
                     user : allAssetsArray[key]["user"],
                     created_at : allAssetsArray[key]["created_at"],
                     status : allAssetsArray[key]["status"]
@@ -246,24 +228,17 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// Edit and delete assets /////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 // edit asset function
 function editAsset(tr,action,type,assetDelete) {
-    
 
-    /////// open edit overlay ////////
+    // open edit overlay
     if (action == "open" && type == 'edit') { 
 
-        // changing popup display to flex
         document.getElementsByClassName("overlay-container")[0].style.display = "flex";
         document.getElementById("request-type").setAttribute("value","edit");
 
-        // setting variables
         var counter = 0;
 
         // populate existing values
@@ -272,37 +247,23 @@ function editAsset(tr,action,type,assetDelete) {
             // setting variables
             formattedAsset = formattedAssetArray[key];
 
-            // filling form with existing values
             if (counter == tr) {
-
                 document.getElementById("asset-id-display").textContent = "TN-" + formattedAsset["id"];
                 document.getElementById("asset-id").setAttribute("value", formattedAsset["id"]);
                 document.getElementById("edit-type").value = formattedAsset["type"];
                 document.getElementById("edit-make").value = formattedAsset["make"];
                 document.getElementById("edit-model").value = formattedAsset["model"];
-                // document.getElementById("edit-area").value = formattedAsset["area"];
-                // document.getElementById("edit-locations_id").value = formattedAsset["location"];
+                document.getElementById("edit-location").value = formattedAsset["location"];
                 document.getElementById("edit-user").value = formattedAsset["user"];
                 document.getElementById("edit-status").value = formattedAsset["status"];
-
             } 
 
             counter += 1;
         })
-
-
-        // // populating area option fields
-        // areaOptionList.forEach(option => {
-        //     var areaOption = document.createElement("option");
-        //     areaOption.text = option;
-        //     areaOption.value = option;
-        //     areaSelect.add(areaOption);
-        // });
-
     }
 
 
-    /////// open add overlay ////////
+    // open add overlay
     if (action == "open" && type == 'add') {
 
         // open popup and populate header
@@ -311,6 +272,13 @@ function editAsset(tr,action,type,assetDelete) {
         document.getElementById("asset-id-display").textContent = "Add Asset";
         document.getElementById("request-type").setAttribute("value","add");
 
+        // clearing data for new asset
+        document.getElementById("edit-type").value = "";
+        document.getElementById("edit-make").value = "";
+        document.getElementById("edit-model").value = "";
+        document.getElementById("edit-location").value = "";
+        document.getElementById("edit-user").value = "";
+        document.getElementById("edit-status").value = "";
     }
 
 
@@ -336,15 +304,5 @@ function editAsset(tr,action,type,assetDelete) {
     if (action == "close") {
         document.getElementsByClassName("overlay-container")[0].style.display = "none";
         document.getElementById("request-type").setAttribute("value","");
-
-        // clearing data for new asset
-        document.getElementById("edit-type").value = "";
-        document.getElementById("edit-make").value = "";
-        document.getElementById("edit-model").value = "";
-        // document.getElementById("edit-area").value = "";
-        // document.getElementById("edit-locations_id").value = "";
-        document.getElementById("edit-user").value = "";
-        document.getElementById("edit-status").value = "";
-
     }
 }
