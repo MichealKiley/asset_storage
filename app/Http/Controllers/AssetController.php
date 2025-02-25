@@ -13,7 +13,7 @@ class AssetController extends Controller
     public function assetAllView()
     {
         // Pulling assets from db
-        $assets = Asset::with('locations')->get();
+        $assets = Asset::with('locations', 'areas')->get();
 
 
         return view("assetAllView", ['assets' => $assets]);

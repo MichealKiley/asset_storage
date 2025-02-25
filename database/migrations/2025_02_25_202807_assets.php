@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('make');
             $table->string('model');
-            $table->string('area');
+            $table->foreignId("areas_id");
             $table->foreignId("locations_id");
             $table->string('user')->nullable();
             $table->string('status');

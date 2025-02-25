@@ -169,8 +169,20 @@
 
     
 
-    <script> window.allAssetsArray = <?php echo json_encode($assets); ?>;</script>
-    <script type="text/javascript" src="js/assets.js"></script>
+    <script> window.allAssetsArray = <?php echo json_encode($assets); ?>;
+    
+    Object.keys(allAssetsArray).forEach(function(key) {
+
+        console.log(allAssetsArray[key]);
+
+    })
+    
+    
+    
+    
+    
+    </script>
+
 
     
 </body>

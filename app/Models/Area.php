@@ -18,4 +18,9 @@ class Area extends Model
     {
         return $this->hasMany(Location::class);
     }
+
+    public function assets(): HasMany
+    {
+        return $this->hasMany(Asset::class);
+    }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Area;
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Asset extends Model
 {
@@ -15,11 +16,17 @@ class Asset extends Model
         'type',
         'make',
         'model',
+        'areas_id',
         'locations_id',
-        'area',
         'user',
         'status'
     ];
+
+    public function areas(): BelongsTo
+    {
+        return $this->belongsTo(Area::class);
+    }
+
 
     public function locations(): BelongsTo
     {

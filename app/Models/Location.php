@@ -27,7 +27,7 @@ class Location extends Model
         return $this->hasMany(Asset::class);
     }
 
-    public function area(): BelongsTo
+    public function areas(): BelongsTo
     {
         return $this->belongsTo(Area::class);
     }
