@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use App\Models\Asset;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,10 +15,13 @@ class AssetController extends Controller
     public function assetAllView()
     {
         // Pulling assets from db
+        $areas = Area::get();
+        $locations = Location::get();
         $assets = Asset::with('locations', 'areas')->get();
 
 
-        return view("assetAllView", ['assets' => $assets]);
+
+        return view("assetAllView", ['areas' => $areas, 'assets' => $assets, 'locations' => $locations]);
     }
 
 

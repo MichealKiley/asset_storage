@@ -1,6 +1,8 @@
 // Declaring Variables
 var sortBtn = null;
 var tbody = document.getElementById("asset-tbody");
+var allAreasArray = allAreasArray;
+var allLocationsArray = allLocationsArray;
 var allAssetsArray = allAssetsArray;
 
 
@@ -263,8 +265,19 @@ function editAsset(tr,action,type,assetDelete) {
         document.getElementsByClassName("overlay-container")[0].style.display = "flex";
         document.getElementById("request-type").setAttribute("value","edit");
 
+
+        // populating area option fields
+        Object.keys(allAreasArray).forEach(function(key) {
+            var areaOption = document.createElement("option");
+            areaOption.text = allAreasArray[key]["area"];
+            areaOption.value = allAreasArray[key]["area"];
+            document.getElementById("edit-areas_id").add(areaOption);
+        });
+
+
         // setting variables
         var counter = 0;
+
 
         // populate existing values
         Object.keys(formattedAssetArray).forEach(function(key) {
@@ -280,8 +293,7 @@ function editAsset(tr,action,type,assetDelete) {
                 document.getElementById("edit-type").value = formattedAsset["type"];
                 document.getElementById("edit-make").value = formattedAsset["make"];
                 document.getElementById("edit-model").value = formattedAsset["model"];
-                // document.getElementById("edit-area").value = formattedAsset["area"];
-                // document.getElementById("edit-locations_id").value = formattedAsset["location"];
+                document.getElementById("edit-areas_id").value = formattedAsset["area"];
                 document.getElementById("edit-user").value = formattedAsset["user"];
                 document.getElementById("edit-status").value = formattedAsset["status"];
 
@@ -290,14 +302,6 @@ function editAsset(tr,action,type,assetDelete) {
             counter += 1;
         })
 
-
-        // // populating area option fields
-        // areaOptionList.forEach(option => {
-        //     var areaOption = document.createElement("option");
-        //     areaOption.text = option;
-        //     areaOption.value = option;
-        //     areaSelect.add(areaOption);
-        // });
 
     }
 

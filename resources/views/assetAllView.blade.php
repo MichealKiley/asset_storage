@@ -10,7 +10,12 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <link href='{{asset('css/assets.css')}}' rel='stylesheet'>
-    <?php $assets = $assets; ?>
+    
+    <?php 
+        $areas = $areas; 
+        $loactions = $locations;
+        $assets = $assets;
+    ?>
 
 </head>
 
@@ -72,7 +77,7 @@
             <div class="edit-select-wrapper-row">
                 <div id="edit-select-field">
                     <label>Area</label>
-                    <select name="area" id="edit-area">
+                    <select name="area" id="edit-areas_id" onchange="test(document.getElementById('edit-areas_id').value)">
 
                     </select>
                 </div>
@@ -169,14 +174,17 @@
 
     
 
-    <script> window.allAssetsArray = <?php echo json_encode($assets); ?>;
-    
-    // Object.keys(allAssetsArray).forEach(function(key) {
+    <script> 
+        window.allAreasArray = <?php echo json_encode($areas); ?>;
+        window.allLocationsArray = <?php echo json_encode($locations); ?>;
+        window.allAssetsArray = <?php echo json_encode($assets); ?>;
 
-    //     console.log(allAssetsArray[key]);
 
-    // })
+        function test(value) {
+            console.log(value);
+        }
     
+
     </script>
 
     <script type="text/javascript" src="js/assets.js"></script>
