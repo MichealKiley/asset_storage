@@ -17,18 +17,16 @@ class Location extends Model
         'type',
         'areas_id',
         'location',
-        'dock',
-        'mnk',
-        'user'
     ];
 
-    public function assets(): HasMany
-    {
-        return $this->hasMany(Asset::class);
-    }
 
     public function areas(): BelongsTo
     {
         return $this->belongsTo(Area::class);
+    }
+
+    public function assets(): HasMany
+    {
+        return $this->hasMany(Asset::class);
     }
 }

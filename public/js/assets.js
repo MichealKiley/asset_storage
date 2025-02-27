@@ -176,7 +176,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
 
 
                 // replacing null fields with empty string
-                nullFieldChecker = ['id','type','make','model','locations_id','area','user','created_at','status']
+                nullFieldChecker = ['id','type','make','model','areas_id','locations_id','user','created_at','status']
                 nullFieldChecker.forEach(item => {
                     if (allAssetsArray[key][item] == null) {
                         allAssetsArray[key][item] = "";
@@ -189,7 +189,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
                     type : allAssetsArray[key]["type"],
                     make : allAssetsArray[key]["make"],
                     model : allAssetsArray[key]["model"],
-                    area : allAssetsArray[key]["area"],
+                    area : allAssetsArray[key]["areas"]["area"],
                     location : allAssetsArray[key]["locations"]["location"],
                     user : allAssetsArray[key]["user"],
                     created_at : allAssetsArray[key]["created_at"],
@@ -208,7 +208,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
             var assetId = 'TN-' + allAssetsArray[key]["id"];
 
             // replacing null fields with empty string
-            nullFieldChecker = ['id','type','make','model','locations_id','area','user','created_at','status']
+            nullFieldChecker = ['id','type','make','model','areas_id','locations_id','user','created_at','status']
             nullFieldChecker.forEach(item => {
                 if (allAssetsArray[key][item] == null) {
                     allAssetsArray[key][item] = "";
@@ -220,8 +220,8 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
                 allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["make"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["model"].toLowerCase().includes(searchQuery) ||
+                allAssetsArray[key]["areas"]["area"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["locations"]["location"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["area"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["user"].toLowerCase().includes(searchQuery) ||
                 allAssetsArray[key]["created_at"].toLowerCase().includes(searchQuery)
             ){
@@ -231,7 +231,7 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
                     type : allAssetsArray[key]["type"],
                     make : allAssetsArray[key]["make"],
                     model : allAssetsArray[key]["model"],
-                    area : allAssetsArray[key]["area"],
+                    area : allAssetsArray[key]["areas"]["area"],
                     location : allAssetsArray[key]["locations"]["location"],
                     user : allAssetsArray[key]["user"],
                     created_at : allAssetsArray[key]["created_at"],

@@ -18,9 +18,6 @@ return new class extends Migration
             $table->string('type');
             $table->foreignId("areas_id");
             $table->string('location')->unique();
-            $table->string('dock')->nullable();
-            $table->string('mnk')->nullable();
-            $table->string('user')->nullable();
             $table->timestamps();
         });
     }
