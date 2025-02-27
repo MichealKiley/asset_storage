@@ -8,7 +8,7 @@ var allAssetsArray = allAssetsArray;
 
 
 // sort table function
-function sortTable(key, order) {
+function sortTable(key, order, type) {
 
 
     // handling sort direction
@@ -253,9 +253,38 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+// populating location field based on the contents of the area field
+function setAreaField(field) {
+
+    //clearing locations field
+    document.getElementById("edit-locations_id").innerHTML = "";
+
+
+    Object.keys(allLocationsArray).forEach(function(key) {
+
+        if (allLocationsArray[key]["areas"]["area"] == field) {
+            var locationOption = document.createElement("option");
+            locationOption.text = allLocationsArray[key]["location"];
+            locationOption.value = allLocationsArray[key]["location"];
+            document.getElementById("edit-locations_id").add(locationOption);
+        }
+    });
+}
+
 
 // edit asset function
 function editAsset(tr,action,type,assetDelete) {
+
+    
+    // populating area option fields
+    allAreasArray.sort((a,b) => a['area'].localeCompare(b['area']));
+
+    Object.keys(allAreasArray).forEach(function(key) {
+        var areaOption = document.createElement("option");
+        areaOption.text = allAreasArray[key]["area"];
+        areaOption.value = allAreasArray[key]["area"];
+        document.getElementById("edit-areas_id").add(areaOption);
+    });
     
 
     /////// open edit overlay ////////
@@ -265,19 +294,8 @@ function editAsset(tr,action,type,assetDelete) {
         document.getElementsByClassName("overlay-container")[0].style.display = "flex";
         document.getElementById("request-type").setAttribute("value","edit");
 
-
-        // populating area option fields
-        Object.keys(allAreasArray).forEach(function(key) {
-            var areaOption = document.createElement("option");
-            areaOption.text = allAreasArray[key]["area"];
-            areaOption.value = allAreasArray[key]["area"];
-            document.getElementById("edit-areas_id").add(areaOption);
-        });
-
-
         // setting variables
         var counter = 0;
-
 
         // populate existing values
         Object.keys(formattedAssetArray).forEach(function(key) {
@@ -296,6 +314,8 @@ function editAsset(tr,action,type,assetDelete) {
                 document.getElementById("edit-areas_id").value = formattedAsset["area"];
                 document.getElementById("edit-user").value = formattedAsset["user"];
                 document.getElementById("edit-status").value = formattedAsset["status"];
+                
+                setAreaField(document.getElementById("edit-areas_id").value);
 
             } 
 
@@ -341,14 +361,13 @@ function editAsset(tr,action,type,assetDelete) {
         document.getElementsByClassName("overlay-container")[0].style.display = "none";
         document.getElementById("request-type").setAttribute("value","");
 
-        // clearing data for new asset
+        // clearing fields after close
         document.getElementById("edit-type").value = "";
         document.getElementById("edit-make").value = "";
         document.getElementById("edit-model").value = "";
-        // document.getElementById("edit-area").value = "";
-        // document.getElementById("edit-locations_id").value = "";
+        document.getElementById("edit-areas_id").innerHTML = "";
+        document.getElementById("edit-locations_id").innerHTML = "";
         document.getElementById("edit-user").value = "";
         document.getElementById("edit-status").value = "";
-
     }
 }

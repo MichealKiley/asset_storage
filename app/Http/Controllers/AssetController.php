@@ -16,7 +16,7 @@ class AssetController extends Controller
     {
         // Pulling assets from db
         $areas = Area::get();
-        $locations = Location::get();
+        $locations = Location::with('areas')->get();
         $assets = Asset::with('locations', 'areas')->get();
 
 
@@ -37,10 +37,28 @@ class AssetController extends Controller
             'type' => 'required',
             'make' => 'required',
             'model' => 'required',
-            'location' => 'required',
+            'areas_id' => 'required',
+            'locations_id' => 'required',
             'user' => 'nullable',
             'status' => 'required'
         ]);
+
+        // converting string values into foreign key id
+        $areas = Area::get();
+        $locations = Location::with('areas')->get();
+
+        foreach ($areas as $row) {
+            if ($row["area"] == $assetData["areas_id"]) {
+                $areas_id = $row["id"];
+            }
+        };
+
+        foreach ($locations as $row) {
+            if ($row["location"] == $assetData["locations_id"]) {
+                $locations_id = $row["id"];
+            }
+        };
+
 
 
         // delete existing asset
@@ -70,7 +88,8 @@ class AssetController extends Controller
             $Asset->type = $assetData["type"];
             $Asset->make = $assetData["make"];
             $Asset->model = $assetData["model"];
-            $Asset->location = $assetData["location"];
+            $Asset->areas_id = $areas_id;
+            $Asset->locations_id = $locations_id;
             $Asset->user = $assetData["user"];
             $Asset->status = $assetData["status"];
             $Asset->update();
