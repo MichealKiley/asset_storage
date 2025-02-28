@@ -77,14 +77,14 @@
             <div class="edit-select-wrapper-row">
                 <div id="edit-select-field">
                     <label>Area</label>
-                    <select name="area" id="edit-areas_id" onchange="setAreaField(document.getElementById('edit-areas_id').value)">
+                    <select name="areas_id" id="edit-areas_id" onchange="setAreaField(document.getElementById('edit-areas_id').value)">
 
                     </select>
                 </div>
 
                 <div id="edit-select-field">
                     <label>Location</label>
-                    <select name="location" id="edit-locations_id">
+                    <select name="locations_id" id="edit-locations_id">
 
                     </select>
                 </div>

@@ -75,6 +75,8 @@ class AssetController extends Controller
             unset($assetData["request-type"]);
             unset($assetData["delete-asset"]);
             unset($assetData["id"]);
+            $assetData["areas_id"] = $areas_id;
+            $assetData["locations_id"] = $locations_id;
 
             Asset::create($assetData);
         }
