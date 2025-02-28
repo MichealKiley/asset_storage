@@ -72,6 +72,7 @@ class AssetController extends Controller
         // create new asset
         elseif ($assetData["request-type"] == "add") {
 
+            // unsetting variables and replacing str with id for foreign key columns
             unset($assetData["request-type"]);
             unset($assetData["delete-asset"]);
             unset($assetData["id"]);

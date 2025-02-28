@@ -156,8 +156,8 @@
                         <th onclick="sortTable('type')">Type <i id="th-type" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('make')">Make <i id="th-make" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('model')">Model <i id="th-model" class='bx bxs-chevron-down'></i></th>
-                        <th onclick="sortTable('areas_id',undefined, 'foreign_key')">Area <i id="th-areas_id" class='bx bxs-chevron-down'></i></th>
-                        <th onclick="sortTable('locations_id')">Location <i id="th-locations_id" class='bx bxs-chevron-down'></i></th>
+                        <th onclick="sortTable('areas_id',undefined, 'foreign')">Area <i id="th-areas_id" class='bx bxs-chevron-down'></i></th>
+                        <th onclick="sortTable('locations_id',undefined, 'foreign')">Location <i id="th-locations_id" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('user')">User<i id="th-user" class='bx bxs-chevron-down'></i></th>
                         <th onclick="sortTable('created_at')">Created <i id="th-created_at" class='bx bxs-chevron-down' ></i></th>
                         <th onclick="sortTable('status')">Status <i id="th-status" class='bx bxs-chevron-down' ></i></th>
