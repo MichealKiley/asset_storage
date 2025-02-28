@@ -6,6 +6,37 @@ var allLocationsArray = allLocationsArray;
 var allAssetsArray = allAssetsArray;
 
 
+// formatting arrays to replace foreign keys with values
+formattedAssetArray = [];
+
+
+Object.keys(allAssetsArray).forEach(function(key) {
+
+    // replacing null fields with empty string
+    nullFieldChecker = ['id','type','make','model','areas_id','locations_id','user','created_at','status']
+    nullFieldChecker.forEach(item => {
+        if (allAssetsArray[key][item] == null) {
+            allAssetsArray[key][item] = "";
+        }
+    })
+
+    // writing results to array
+    formattedAssetArray.push({
+        id : allAssetsArray[key]["id"],
+        type : allAssetsArray[key]["type"],
+        make : allAssetsArray[key]["make"],
+        model : allAssetsArray[key]["model"],
+        area : allAssetsArray[key]["areas"]["area"],
+        location : allAssetsArray[key]["locations"]["location"],
+        user : allAssetsArray[key]["user"],
+        created_at : allAssetsArray[key]["created_at"],
+        status : allAssetsArray[key]["status"]
+    });
+})
+
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// Sorting Table Data /////////////////////////////////////////////////////////////////////////
@@ -16,59 +47,84 @@ var allAssetsArray = allAssetsArray;
 // sort table function
 function sortTable(key, order, type) {
 
-    // handling sort direction
-    if (order == undefined) {
-        var icon = document.getElementById("th-" + key).className;
 
-        if (icon == "bx bxs-chevron-down") {
-            order = "ascend";
-        } 
-        else  if (icon == "bx bxs-chevron-up") {
-            order = "descend";
+    // if key is a foreign column
+    if (type == "foreign") {
+
+        keySort = undefined
+        
+
+        // keySort = [{
+        //     "key" : key,
+        //     "order" : order,
+        // }]
+
+        // sending data to be displayed
+        if (sortBtn == "search") {
+            displayAssetsSort(sortBtn,keySort,searchData.toLowerCase(), "foreign");
+        } else {
+            displayAssetsSort(sortBtn,keySort, undefined, "foreign");
         }
     }
 
-    // changing icon
-    if (order == "descend") {
-        document.getElementById("th-" + key).className = "bx bxs-chevron-down";
-    }
 
-    else if (order == "ascend") {
-        document.getElementById("th-" + key).className = "bx bxs-chevron-up";
-    }
-    
+    // if key is not a foreign column
+    else if (type == undefined) {
 
-    // clearing table
-    document.getElementById("asset-tbody").innerHTML = "";   
+        // handling sort direction
+        if (order == undefined) {
+            var icon = document.getElementById("th-" + key).className;
 
-    // sorting non-number key
-    if (isNaN(allAssetsArray[0][key])) {
-        if (order == "ascend") {
-            keySort = (a,b) => a[key].localeCompare(b[key]);
+            if (icon == "bx bxs-chevron-down") {
+                order = "ascend";
+            } 
+            else  if (icon == "bx bxs-chevron-up") {
+                order = "descend";
+            }
         }
+
+        // changing icon
         if (order == "descend") {
-            keySort = (a,b) => b[key].localeCompare(a[key]);
+            document.getElementById("th-" + key).className = "bx bxs-chevron-down";
         }
+
+        else if (order == "ascend") {
+            document.getElementById("th-" + key).className = "bx bxs-chevron-up";
+        }
+        
+
+        // clearing table
+        document.getElementById("asset-tbody").innerHTML = "";   
+
+        // sorting non-number key
+        if (isNaN(formattedAssetArray[0][key])) {
+            if (order == "ascend") {
+                keySort = (a,b) => a[key].localeCompare(b[key]);
+            }
+            if (order == "descend") {
+                keySort = (a,b) => b[key].localeCompare(a[key]);
+            }
+        }
+
+            // sorting number key
+        if (!isNaN(formattedAssetArray[0][key])) {
+            if (order == "ascend") {
+                keySort = (a,b) => a[key] - b[key];
+            }
+            if (order == "descend") {
+                keySort = (a,b) => b[key] - a[key];
+            }
+        }
+
+        // sending data to be displayed
+        if (sortBtn == "search") {
+            displayAssetsSort(sortBtn,keySort,searchData.toLowerCase());
+        } else {
+            displayAssetsSort(sortBtn,keySort);
+        }
+
     }
 
-        // sorting number key
-    if (!isNaN(allAssetsArray[0][key])) {
-        if (order == "ascend") {
-            keySort = (a,b) => a[key] - b[key];
-        }
-        if (order == "descend") {
-            keySort = (a,b) => b[key] - a[key];
-        }
-    }
-
-    // sending data to be displayed
-    if (sortBtn == "search") {
-        displayAssetsSort(sortBtn,keySort,searchData.toLowerCase());
-    } else {
-        displayAssetsSort(sortBtn,keySort);
-    }
-
-    return keySort;
 }
 
 
@@ -116,13 +172,13 @@ function sortSearch(searchData) {
 
 
 
-function buildAssetTable(formattedAssetArray) {
+function buildAssetTable(sortedAssetArray) {
     
     var counter = 0;
 
-    Object.keys(formattedAssetArray).forEach(function(key) {
+    Object.keys(sortedAssetArray).forEach(function(key) {
 
-        formattedAsset = formattedAssetArray[key];
+        formattedAsset = sortedAssetArray[key];
         status = formattedAsset["status"];
 
 
@@ -175,41 +231,32 @@ function buildAssetTable(formattedAssetArray) {
 
 
 
-function displayAssetsSort(sortBtn,sort,searchQuery) {
+function displayAssetsSort(sortBtn,sort,searchQuery,type) {
 
     // setting variables
-    var formattedAssetArray = []
-    allAssetsArray.sort(sort);
+    var sortedAssetArray = []
 
     /////////// sorting through assets for quick sort feature ///////////
     if (sortBtn != "search"){
-        Object.keys(allAssetsArray).forEach(function(key) {
+        Object.keys(formattedAssetArray).forEach(function(key) {
 
 
 
             // checking for sort buttons
-            if (allAssetsArray[key]["type"].toLowerCase() == sortBtn || sortBtn == "all"){
+            if (formattedAssetArray[key]["type"].toLowerCase() == sortBtn || sortBtn == "all"){
 
-
-                // replacing null fields with empty string
-                nullFieldChecker = ['id','type','make','model','areas_id','locations_id','user','created_at','status']
-                nullFieldChecker.forEach(item => {
-                    if (allAssetsArray[key][item] == null) {
-                        allAssetsArray[key][item] = "";
-                    }
-                })
 
                 // writing results to array
-                formattedAssetArray.push({
-                    id : allAssetsArray[key]["id"],
-                    type : allAssetsArray[key]["type"],
-                    make : allAssetsArray[key]["make"],
-                    model : allAssetsArray[key]["model"],
-                    area : allAssetsArray[key]["areas"]["area"],
-                    location : allAssetsArray[key]["locations"]["location"],
-                    user : allAssetsArray[key]["user"],
-                    created_at : allAssetsArray[key]["created_at"],
-                    status : allAssetsArray[key]["status"]
+                sortedAssetArray.push({
+                    id : formattedAssetArray[key]["id"],
+                    type : formattedAssetArray[key]["type"],
+                    make : formattedAssetArray[key]["make"],
+                    model : formattedAssetArray[key]["model"],
+                    area : formattedAssetArray[key]["area"],
+                    location : formattedAssetArray[key]["location"],
+                    user : formattedAssetArray[key]["user"],
+                    created_at : formattedAssetArray[key]["created_at"],
+                    status : formattedAssetArray[key]["status"]
                 });
             }
         })
@@ -218,47 +265,39 @@ function displayAssetsSort(sortBtn,sort,searchQuery) {
 
     /////////// sorting through assets for search feature ///////////
     else if (sortBtn == "search") {
-        Object.keys(allAssetsArray).forEach(function(key) {
+        Object.keys(formattedAssetArray).forEach(function(key) {
 
             // setting variables
-            var assetId = 'TN-' + allAssetsArray[key]["id"];
-
-            // replacing null fields with empty string
-            nullFieldChecker = ['id','type','make','model','areas_id','locations_id','user','created_at','status']
-            nullFieldChecker.forEach(item => {
-                if (allAssetsArray[key][item] == null) {
-                    allAssetsArray[key][item] = "";
-                }
-            })
+            var assetId = 'TN-' + formattedAssetArray[key]["id"];
 
             // converting items to lowercase and checking for partial match
             if (assetId.toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["type"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["make"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["model"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["areas"]["area"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["locations"]["location"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["user"].toLowerCase().includes(searchQuery) ||
-                allAssetsArray[key]["created_at"].toLowerCase().includes(searchQuery)
+                formattedAssetArray[key]["type"].toLowerCase().includes(searchQuery) ||
+                formattedAssetArray[key]["make"].toLowerCase().includes(searchQuery) ||
+                formattedAssetArray[key]["model"].toLowerCase().includes(searchQuery) ||
+                formattedAssetArray[key]["area"].toLowerCase().includes(searchQuery) ||
+                formattedAssetArray[key]["location"].toLowerCase().includes(searchQuery) ||
+                formattedAssetArray[key]["user"].toLowerCase().includes(searchQuery) ||
+                formattedAssetArray[key]["created_at"].toLowerCase().includes(searchQuery)
             ){
                 // writing results to array
-                formattedAssetArray.push({
-                    id : allAssetsArray[key]["id"],
-                    type : allAssetsArray[key]["type"],
-                    make : allAssetsArray[key]["make"],
-                    model : allAssetsArray[key]["model"],
-                    area : allAssetsArray[key]["areas"]["area"],
-                    location : allAssetsArray[key]["locations"]["location"],
-                    user : allAssetsArray[key]["user"],
-                    created_at : allAssetsArray[key]["created_at"],
-                    status : allAssetsArray[key]["status"]
+                sortedAssetArray.push({
+                    id : formattedAssetArray[key]["id"],
+                    type : formattedAssetArray[key]["type"],
+                    make : formattedAssetArray[key]["make"],
+                    model : formattedAssetArray[key]["model"],
+                    area : formattedAssetArray[key]["area"],
+                    location : formattedAssetArray[key]["location"],
+                    user : formattedAssetArray[key]["user"],
+                    created_at : formattedAssetArray[key]["created_at"],
+                    status : formattedAssetArray[key]["status"]
                 });
             }
         })
     }
 
-    buildAssetTable(formattedAssetArray);
-    window.formattedAssetArray = formattedAssetArray;
+    buildAssetTable(sortedAssetArray);
+    window.sortedAssetArray = sortedAssetArray;
 }
 
 
@@ -314,10 +353,10 @@ function editAsset(tr,action,type,assetDelete) {
         var counter = 0;
 
         // populate existing values
-        Object.keys(formattedAssetArray).forEach(function(key) {
+        Object.keys(sortedAssetArray).forEach(function(key) {
 
             // setting variables
-            formattedAsset = formattedAssetArray[key];
+            formattedAsset = sortedAssetArray[key];
 
             // filling form with existing values
             if (counter == tr) {
